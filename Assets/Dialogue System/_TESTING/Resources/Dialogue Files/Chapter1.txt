@@ -1,0 +1,66 @@
+PlaySFX(~/Audio/ChurchBellsFar -loop true)
+PlayAmbience(RainyMood -v 0.5)
+Narrator "The sky rumbled as a storm approached.{c}Not soon after the storm worsened and the sky began to let down a deluge as lightning crackled above."
+
+ShowGalleryImage(0_ForestPath)
+"Dashing through the rain and mud, two figures began to see lights emerge through the thick of the trees surrounding them."
+
+Stella as ??? "Look! I see lights ahead!"
+
+Raelin as ??? "It's the village, hurry!{wa 1} We're almost there!"
+
+Narrator "Excitement filled their breath and fueled their steps.{c}Within moments, they broke through the forest boundaries and came into the walkway of a small and simple village."
+
+StopSFX(ChurchBellsFar)
+HideGalleryImage()
+PlaySong("Electric Drift" -v 0.4)
+SetLayerMedia(background villagenight)
+CreateCharacter(Stella), CreateCharacter(Raelin), Stella.SetPosition(-0.3), Raelin.SetPosition(1.3), Stella.Move(0.1), Raelin.Move(0.9)
+Stella.Show(), Raelin.Show()
+
+Stella [0:1,1:happy 1] "Finally here!"
+
+Stella.Move(0.2 -spd 0.3), Stella.FaceRight()
+Stella [0:4,1:default 4] "Hey, Raelin - you think this place has an inn?"
+
+Raelin.SetSprite(A2 -l 0 -spd 1), Raelin.SetSprite(A_Stern -l 1 -spd 1)
+Raelin "I don't care if we have to sleep in a stable - we just need to get out of this storm."
+
+Raelin.Move(0.6 -spd 1.2), Raelin.SetSprite(A_Scold -l 1 -spd 1), Raelin.Animate(Shiver true)
+"I'm cold and wet - and we're going to get sick out here!"
+
+Raelin.Animate(Shiver false)
+PlayVoice("Stella/Yeah_Laugh"), Stella.Move(0.1 -spd 0.5)
+Stella [0:3,1:happy 3] "Yeah, maybe. But since we're stuck out here, I prefer to think of it like a nice, cold shower!"
+
+Raelin.Animate(Hop), Raelin.Move(0.7 -spd 0.7)
+Raelin [0:B1,1:B_Scold] "Okay - first of all...{wa 0.5} Cold showers are not <i>nice</i> I don't care what anyone says.{c}And secondly, I don't shower with my clothes on.{c}Let's just find somewhere quick."
+
+Stella.Move(0.3 -spd 0.7)
+Stella [1:default 3] "Hey - I think I see something over there!"
+
+ShowGalleryImage(1_VillageInn)
+Raelin.FaceRight()
+Raelin "It's a lodge! Maybe they have a spare room?"
+
+Stella "Possibly. Or we just go a little further. My ship is just beyond this village, and I've got plenty of room in there."
+
+choice "Where Should You Go?"
+{
+	-To The Inn
+		Raelin "Stella, we're already here!{a} Let's just get in the lodge and out of this storm!"
+		Stella "Okay!"
+		Load(Chapter1_Inn -enqueue true)
+	-To The Ship
+		Raelin "Fine, we'll go to the ship. That will make it easier to leave in the morning..."
+		Stella "You betcha!"
+		Load(Chapter1_Ship)
+}
+
+HideGalleryImage()
+HideDB(-spd 1)
+Stella.Move(1.5 -spd 2), Raelin.Move(1.5 -spd 2), Raelin.FaceRight() Stella.Hide(), Raelin.Hide()
+wait(0.75)
+ClearLayerMedia(background), wait(1)
+StopSong(), StopAmbience()
+wait(1)

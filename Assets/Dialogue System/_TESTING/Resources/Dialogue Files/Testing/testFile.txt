@@ -1,0 +1,158 @@
+$boolTrue = true
+$boolFalse = false
+$numberOne = 1
+$numberTwo = 2
+$numberThree = 3
+$numberFive = 5
+$stringOne = "Olá"
+$stringTwo = "Mundo"
+$stringHello = "Olá"
+
+narrator "Variável1 é $numberOne"
+
+narrator "De novo, eu digo que $numberOne."
+
+$myVar = $numberOne + $numberFive + $numberTwo + 1000
+
+narrator "myVar = $myVar"
+
+$JP.love = 32
+$Pepita.love = 27
+
+choice "Dar as flores para quem?"
+{
+	-JP
+		$JP.love += 10
+	-Pepita
+		$Pepita.love += 10
+}
+
+if ($Pepita.love > $JP.love)
+{
+	narrator "Sua afeição com Pepita é maior do que com JP."
+}
+else
+{
+	narrator "Sua afeição com JP é maior do que com Pepita."
+}
+
+
+# Testar comparações
+if ($boolTrue == $boolFalse)
+{
+	narrator "boolTrue é igual a boolFalse. Isso não deveria acontecer."
+}
+else
+{
+	narrator "boolTrue não é igual a boolFalse. Isso está correto."
+}
+
+if ($numberOne != $numberTwo)
+{
+	narrator "numberOne é diferente de numberTwo. Isso está correto."
+}
+else
+{
+	narrator "numberOne é igual a numberTwo. Isso não deveria acontecer."
+}
+
+if ($numberThree > $numberTwo)
+{
+	narrator "numberThree é maior que numberTwo. Isso está correto."
+}
+else
+{
+	narrator "numberThree não é maior que numberTwo. Isso não deveria acontecer."
+}
+
+if ($numberOne < $numberTwo)
+{
+	narrator "numberOne é menor que numberTwo. Isso está correto."
+}
+else
+{
+	narrator "numberOne não é menor que numberTwo. Isso não deveria acontecer."
+}
+
+if ($numberThree <= $numberThree)
+{
+	narrator "numberThree é menor ou igual a numberThree. Isso está correto."
+}
+else
+{
+	narrator "numberThree não é menor ou igual a numberThree. Isso não deveria acontecer."
+}
+
+if ($numberFive >= $numberThree)
+{
+	narrator "numberFive é maior ou igual a numberThree. Isso está correto."
+}
+else
+{
+	narrator "numberFive não é maior ou igual a numberThree. Isso não deveria acontecer."
+}
+
+# Testar operadores lógicos
+if ($boolTrue && $boolFalse)
+{
+	narrator "boolTrue E boolFalse é verdadeiro. Isso não deveria acontecer."
+}
+else
+{
+	narrator "boolTrue E boolFalse é falso. Isso está correto."
+}
+
+if ($boolTrue || $boolFalse)
+{
+	narrator "boolTrue OU boolFalse é verdadeiro. Isso está correto."
+}
+else
+{
+	narrator "boolTrue OU boolFalse é falso. Isso não deveria acontecer."
+}
+
+# Testar operadores aritméticos
+$numberOne += 1
+narrator "numberOne mais 1 é $numberOne. Isso deve ser 2."
+
+$numberTwo -= 1
+narrator "numberTwo menos 1 é $numberTwo. Isso deve ser 1."
+
+$numberThree *= 2
+narrator "numberThree multiplicado por 2 é $numberThree. Isso deve ser 6."
+
+$numberFive /= $numberOne
+narrator "numberFive dividido por numberOne é $numberFive. Isso deve ser 2.5."
+
+# Testar operador unário
+if (!$boolFalse)
+{
+	narrator "A negação de boolFalse é verdadeiro. Isso está correto."
+}
+else
+{
+	narrator "A negação de boolFalse é falso. Isso não deveria acontecer."
+}
+
+# Testar comparações de string
+if ($stringOne == $stringHello)
+{
+	narrator "stringOne é igual a stringHello. Isso está correto."
+}
+else
+{
+	narrator "stringOne não é igual a stringHello. Isso não deveria acontecer."
+}
+
+if ($stringOne != $stringTwo)
+{
+	narrator "stringOne é diferente de stringTwo. Isso está correto."
+}
+else
+{
+	narrator "stringOne é igual a stringTwo. Isso não deveria acontecer."
+}
+
+
+$stringHello = "Olá $stringTwo"
+narrator "stringHello + \" stringTwo\" = $stringHello"

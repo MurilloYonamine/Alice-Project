@@ -1,0 +1,207 @@
+SetLayerMedia(background inn_night_1), PlaySong(Calm2)
+Stella.Show(), Raelin.Show(), Stella.SetPosition(-0.5), Raelin.SetPosition(-0.5)
+Stella.Move(0.3 -spd 1.5), Raelin.Move(0 -spd 1.5)
+wait(1)
+
+ShowDB(-i true)
+Raelin "Finaly, out of that storm!{c}Now let's just hope they have a room here."
+Stella "Let's find out.{c}Hello?{a} Is anyone here?"
+
+narrator "Stepping out from a room in the far back of the lodge, a tall, gruff man took his place behind the counter."
+
+CreateCharacter("Innkeeper as Generic" -e true), Innkeeper.SetSprite(Man), InnKeeper.SetPosition(1.3), Innkeeper.Move(1)
+
+Innkeeper "That's a nasty storm out there.{c}But I don't need to tell you that, it seems."
+
+Narrator "The man let out a hearty chuckle and offered the two girls a drink."
+
+Innkeeper "If you came looking for a room, I'm afraid the most I can offer you is a hot drink and seat by the fire tonight."
+
+Raelin.SetSprite("A2,A_Shocked" -spd 1), Raelin.Move(0.1 -spd 1.3)
+Raelin "You mean, you have no vacancies?"
+
+Innkeeper "I'm afraid not.{a} The last room was taken this morning. I'm afraid I don't have anything else available."
+
+Raelin.SetSprite(A_Scared -l 1 -spd 1), Stella.SetSprite("3,sad 3" -spd 1), Stella.Move(0.35)
+Stella "Nothing else?"
+
+Innkeeper "That's right. I'm all booked."
+
+Stella.FaceLeft()
+Stella "That's a bummer..."
+
+Stella.FaceRight()
+Innkeeper "Well, I don't want you ladies getting sick, and I know there isn't anywhere else in this village that can house you, so I'll make an exception for tonight and let you sleep in the lounge."
+"I've got some spare blankets and pillows - you won't have the privacy of your own space, but you can warm by the fire and rest for the night at least."
+
+Stella.SetSprite("4,happy 4"), Stella.Animate(Hop), Raelin.SetSprite("B2,B_Blush"), Raelin.Animate(Hop)
+Stella "Oh, that would just be wonderful!{c}You are too kind, sir!"
+
+Raelin.SetSprite("")
+Raelin "Wow - thank you, sir.{a} We really would appreciate that."
+
+Innkeeper "I thought you might. There's a restroom around the corner where you can get changed and out of those soaked clothes. Then just make yourselves at home."
+
+Stella.SetSprite("default 4" -l 1)
+Stella "Thank you very much."
+
+Unhighlight(all)
+Narrator "Just then, the doors opened up and the rumble of thunder rang through the open air."
+CreateCharacter("Monk as Generic"), Monk.SetSprite(Monk), Monk.SetPosition(-0.3)
+"Turning their attention to the open doors, everyone watched as a man clad in robes stepped through."
+Stella.FaceLeft(), Raelin.FaceLeft(), Stella.SetSprite("1,default 1"), Raelin.SetSprite("B2,B_Default"), Stella.Move(0.5), Raelin.Move(0.6), Innkeeper.Move(1)
+Sort(Monk Stella Raelin Innkeeper)
+Monk.Show(), Monk.Move(0.1)
+"He closed the doors gently behind him and walked up to the front."
+"Stella tried but could not discern his face under the shadow of his hood."
+"He stepped up behind Raelin and Stella, giving them a polite nod before turning his attention to the innkeeper."
+
+Highlight(all), Monk.FaceRight()
+Monk as ??? "Good evening, innkeeper. I have a room reserved for <i><color=red>The Order</color></i>."
+
+Innkeeper "Ah, good evening, sir. I've got your key right here."
+
+Narrator "The innkeeper reached under the table and pulled out a small bronze key, handing it to the monk"
+
+Innkeeper "It's been a while since we've had a guest of your esteemed order."
+
+Narrator "The monk smiled pleasantly at the innkeeper, accepting the key."
+
+Innkeeper "Room 5. It's all prepared and ready for your stay. If there's anything you need, please don't hesitate to ask."
+
+Monk as ??? "Thank you for your hospitality, innkeeper. Your establishment has always been a haven of tranquility for weary travelers. I appreciate your efforts"
+
+Monk.Move(-0.3), Monk.Hide()
+Narrator "The monk bowed respectfully, taking the key and making his way towards the stairs. The girls watched, intrigued by the monk's presence"
+"As if reading their minds, the innkeeper spoke in response to their silent questions."
+
+Stella.FaceRight(), Raelin.FaceRight(), Stella.Move(0.3), Raelin.Move(0)
+Innkeeper "Something strange has been going on in the spirit world for quite some time. Monks like him have been keeping the evil spirits at rest for the past few years."
+"You ask me, having him in the inn feels like a harbinger of good luck.{c}Anyway, please make yourselves comfortable.{a} I'll bring you some bedding from the back."
+
+Innkeeper.Move(1.3 -spd 0.7), Innkeeper.Hide()
+Narrator "Intrigued by the presence of the monk, Stella looked up the stairs after him but soon followed Raelin to get dressed in the bathroom."
+
+
+ClearLayerMedia(background), Hide(all), wait(0.5), hideDB(), wait(3)
+SetLayerMedia(background inn_night_3), PlaySong(Departure)
+
+Raelin.SetPosition(1.3), Stella.SetPosition(0.3), Stella.FaceRight(), Stella.SetSprite("1,default 1"), Stella.Show(), Raelin.Show(), Raelin.Move(0.7)
+
+Raelin "Ah - finally in some dry clothes. It's so much better than being soaked to the bone."
+
+Stella "I couldn't agree more. That storm was intense. But now, we're safe and warm."
+
+Raelin "Yeah, we owe a lot to that kind innkeeper. I was worried we'd have to spend the night shivering in the rain."
+
+Stella.Move(0.2), Stella.SetSprite("2,happy 2")
+Stella "Well, thankfully that won't be a problem. And we even get to warm up by the fire.{c} This is much nicer than I was expecting!"
+
+Monk.Show(), Monk.SetPosition(-0.3), Monk.FaceRight(), Stella.FaceLeft(), Raelin.FaceLeft()
+Monk.Move(0.2), Raelin.Move(1), Stella.Move(0.7), Stella.SetSprite("1,default 1")
+
+Monk "Greetings, travelers. I couldn't help but overhear your conversation."
+
+Stella "Oh, hello sir. Yep, we're just enjoying the dryness and warmth of the fire right now."
+
+Raelin "And we're relieved to be out of the storm. It has been quite an adventure so far."
+
+Monk "Indeed, storms have a way of revealing our inner strength. But it seems that you both are seeking something beyond the storm's reach."
+
+Stella "What do you mean?"
+
+Monk "I am attuned to the spiritual energies that surround us. I sense that you two are on a journey to enter the spirit world."
+
+Stella.FaceRight(), Raelin.FaceLeft(), Stella.SetSprite("3,default 3"), Raelin.SetSprite("B1,B_Shocked")
+Narrator "Raelin and Stella exchange surprised glances"
+
+Stella.FaceLeft()
+Raelin "How did you know? We've been searching for a way to enter the spirit world."
+
+Monk.Move(0.3)
+Monk "It is my duty to safeguard the spirit realm and guide those who seek its presence. I can assist you, but I have a request in return."
+
+Stella "That's exactly why we're here.{c}But what would you need from us?"
+
+Monk "There is a task of great importance within the spirit world. I seek the retrieval of a mystical diamond, an artifact that holds immense power. Its safekeeping is crucial for maintaining balance between our worlds."
+
+Stella "Retrieving the diamond sounds like a challenging task, but we accept your request. How can we assist you?"
+
+Monk "Take this."
+
+Unhighlight(all), Raelin.SetSprite(1:B_Default)
+Narrator "The monk presents a small, glowing diamond"
+"Raelin and Stella receive the diamond with a mix of excitement and reverence"
+
+Highlight(Monk Stella Raelin)
+Monk "This diamond is attuned to the spirit world. When the stars shine their brightest, hold it up and speak the name of the place you wish to enter within the spirit realm."
+
+Stella.SetSprite("1,happy 1")
+Stella "Thank you, kind monk. We accept your request and promise to do our best in retrieving the diamond."
+
+Raelin.SetSprite("A2,A_Laugh")
+Raelin "We are grateful for your guidance and trust in us. We won't let you down."
+
+Monk "I sense determination and bravery within you both. The spirit world awaits. When you are ready, use the diamond as I have instructed."
+
+Narrator "Raelin and Stella nod with determination, holding the diamond close"
+
+Monk "May the spirits guide and protect you on your quest"
+
+
+
+
+
+SetLayerMedia(background "Fantasy City"), PlaySong(Enchantment)
+Monk.Hide(), Raelin.Hide(), Stella.SetPosition(0.5 -spd 1.5), Stella.SetSprite("2,default 2")
+
+Stella "Raelin?{c}Where are you?"
+
+CreateCharacter(Glo), Glo.SetPosition(1)
+enter Glo as ??? [Confused] "Stella? Is that you?"
+
+Stella.FaceRight(), Stella.SetSprite("3,default 3"), Stella.Move(0.3)
+Stella "Hmm?"
+
+Glo.SetSprite(Happy), [wait]Glo.Move(0.6 -spd 2), Glo.Animate(Hop)
+Glo "It is you!{a} Stella!"
+
+Stella.SetSprite("4,happy 4")
+Stella "Hi there, Glo!{c}It's been so long since I've seen you, how have you been, little guy?"
+
+Glo "Ecstatic!{c}But not as much as I am right now! I'm so thrilled to see you!"
+Glo.Animate(Hop)
+wait(0.3)
+Glo.Move(0.7 -spd 2), Glo.SetSprite(Scared), Glo.Animate(Shiver true)
+"Oh! Farah hasn't seen you in forever either! She's gonna be thrilled!!!"
+
+Stella "Hehe - it's nice to see you too, Glo."
+
+Glo.SetSprite(default), Glo.Animate(Shiver false)
+Glo "Come on - let me take you to Farah"
+
+Glo.move(-0.3 -spd 3), Stella.Move(-0.3 -spd 3)
+wait(1), Hide(Glo Stella -i true)
+SetLayerMedia(background "Fantasy Landscape" -aud true -blend hurricane)
+
+PlaySong(Happy -p 0.7)
+Show(Glo Stella), Stella.Move(0.3), Glo.Move(0.1), Glo.FaceRight()
+
+CreateCharacter(Farah -e true), Farah.SetPosition(1)
+Farah.Show()
+
+Glo.Animate(Hop)
+Glo "Farah, look who I brought!"
+
+Farah.SetSprite(Happy)
+Farah "Stella!{a} Oh my word - it's been so long!"
+
+Stella "Hi, Farah! How have you been?"
+
+Farah.SetSprite(Default)
+Farah "Just great. Glo, Nick and I have been quite busy. And the house is complete!"
+
+Farah.SetSprite(Irritated)
+"Although, <color=red><i>The Demon</i></color> has been busy trying to ruin everything."
+
+Hide(Glo Farah), Show(Raelin)

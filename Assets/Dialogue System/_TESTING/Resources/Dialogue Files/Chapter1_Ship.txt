@@ -1,0 +1,8 @@
+SetLayerMedia(background -m 5), PlaySong(Calm2)
+Stella.Show(), Raelin.Show(), Stella.SetPosition(-0.5), Raelin.SetPosition(-0.5)
+Stella.Move(0.3 -spd 1.5), Raelin.Move(0 -spd 1.5)
+wait(1)
+
+ShowDB(-i true)
+Raelin "Finaly, out of that storm!"
+Stella "Ah, home sweet home!"
