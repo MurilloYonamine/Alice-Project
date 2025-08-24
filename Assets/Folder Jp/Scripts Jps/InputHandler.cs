@@ -2,44 +2,64 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour{
-    private bool isMoving, isJumping;
+    //Variables
+    #region
+    //Movement Variables
     private float speed = 5f;
-    private float jumpForce = 10f;
-    public Rigidbody2D rb;
-    private Vector2 direction;
-    AudioHandler audioHandler;
-    public void Move(InputAction.CallbackContext context){
-        if (context.phase == InputActionPhase.Started){
-        }else if (context.phase == InputActionPhase.Performed){
-            isMoving = true;
-            direction = context.ReadValue<Vector2>();
-            audioHandler.PlaySFX(audioHandler.jump);
-        }else if (context.phase == InputActionPhase.Canceled){
-            isMoving = false;
-        }
-    }
+    private float HorizontalMoviment;
+    //Jump Variables
+    private float jumpPower = 10f;
+    //Ground Check Variables
+    [SerializeField] private Transform groundCheckPos;
+    [SerializeField] private Vector2 groundCheckSize = new Vector2(1f, 0.05f);
+    [SerializeField] private LayerMask groundLayer;
+    //Other Variables
+    private Rigidbody2D rb;
+    #endregion
 
-    /*public void Jump(InputAction.CallbackContext context){
-        if (context.phase == InputActionPhase.Started){
-        }else if (context.phase == InputActionPhase.Performed){
-            isJumping = true;
-            direction = context.ReadValue<Vector2>();
-        }else if (context.phase == InputActionPhase.Canceled){
-            isJumping = false;
-        }
-    }*/
-
+    //Unity Methods
+    #region
     public void Awake(){
-        audioHandler = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioHandler>();
+        rb = this.GetComponent<Rigidbody2D>();
     }
 
-    public void Update() {
-        if (isMoving){
-            transform.position += new Vector3(direction.x, direction.y, 0) * Time.deltaTime * speed;
-        }
-        if (isJumping){
-            //transform.position += new Vector3(0, jumpForce, 0) * Time.deltaTime * speed;
-            //rb.linearVelocity = new Vector2 (direction.x, direction.y * jumpForce);
+    public void Update(){
+        rb.linearVelocity = new Vector2(HorizontalMoviment * speed, rb.linearVelocity.y);
+    }
+    #endregion
+
+    //Player Input Methods
+    #region
+    public void Move(InputAction.CallbackContext context){
+        HorizontalMoviment = context.ReadValue<Vector2>().x;
+    }
+
+    public void Jump(InputAction.CallbackContext context){
+        if (isGrounded()){ 
+            if (context.performed){
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
+            }else if (context.canceled){
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0.5f);
+            }
+        }else if(context.performed){
+            Debug.Log("Usou Item");
         }
     }
+    #endregion
+
+    //Ground Check Methods
+    #region
+    private void OnDrawGizmosSelected(){
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireCube(groundCheckPos.position, groundCheckSize);
+    }
+
+    private bool isGrounded(){
+        if (Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, groundLayer)){
+            return true;
+        }
+        return false;
+    }
+
+    #endregion
 }
