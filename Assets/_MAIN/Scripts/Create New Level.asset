@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4abce85523ba1e7418ba14c93597e994, type: 3}
   m_Name: Create New Level
   m_EditorClassIdentifier: 
-  Row: 8
-  Col: 9
-  tilemap: {fileID: 0}
+  _row: 2
+  _col: 2
+  _tilemap: {fileID: 0}
