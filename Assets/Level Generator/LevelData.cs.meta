@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 719d6222ba88d68418d2b2588616c82a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - structureTile: {fileID: 11400000, guid: f73b1734677065e44af172bfbe0fa040, type: 2}
+  - enemyTile: {fileID: 11400000, guid: df13796d54f33344a9e7e901fb7e5d3c, type: 2}
+  - emptyTile: {fileID: 11400000, guid: 4b55e43fc963c464abde8f11664a3597, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

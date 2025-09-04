@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 719d6222ba88d68418d2b2588616c82a, type: 3}
+  m_Name: TestData
+  m_EditorClassIdentifier: 
+  structureTile: {fileID: 11400000, guid: f73b1734677065e44af172bfbe0fa040, type: 2}
+  enemyTile: {fileID: 11400000, guid: df13796d54f33344a9e7e901fb7e5d3c, type: 2}
+  emptyTile: {fileID: 11400000, guid: 4b55e43fc963c464abde8f11664a3597, type: 2}
