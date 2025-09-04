@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class LevelData : ScriptableObject {
-    public List<List<SquareStates>> squares;
-
-    [SerializeField] private TileBase structureTile;
-    [SerializeField] private TileBase enemyTile;
-    [SerializeField] private TileBase emptyTile;
+namespace LEVEL_GENERATOR {
+    public class LevelData : ScriptableObject {
+        [SerializeField] public List<SquareRow> Squares = new List<SquareRow>();
+        [field: SerializeField] public TileBase StructureTile { get; private set; }
+        [field: SerializeField] public TileBase EnemyTile { get; private set; }
+        [field: SerializeField] public TileBase EmptyTile { get; private set; }
+    }
 }
