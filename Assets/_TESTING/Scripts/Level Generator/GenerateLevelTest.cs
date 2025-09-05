@@ -5,11 +5,14 @@ namespace LEVEL_GENERATOR.TESTING {
     public class GenerateLevelTest : MonoBehaviour {
         [SerializeField] private LevelData _levelData;
         [SerializeField] private Tilemap _tilemap;
-        void Start() {
+        [SerializeField] private TileBase _tileTest;
+        private void Start() {
             if (_levelData == null) {
                 Debug.LogError("Esqueceu o LevelData.");
                 return;
             }
+
+            _tilemap.SetTile(new Vector3Int(0, 0, 0), _tileTest);
 
             _tilemap.ClearAllTiles();
             _tilemap.CompressBounds();
