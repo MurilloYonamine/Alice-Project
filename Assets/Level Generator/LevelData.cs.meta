@@ -4,7 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - <StructureTile>k__BackingField: {fileID: 11400000, guid: 4b55e43fc963c464abde8f11664a3597, type: 2}
+  - <StructureTile>k__BackingField: {fileID: 11400000, guid: f73b1734677065e44af172bfbe0fa040, type: 2}
   - <EnemyTile>k__BackingField: {fileID: 11400000, guid: df13796d54f33344a9e7e901fb7e5d3c, type: 2}
   - <EmptyTile>k__BackingField: {fileID: 11400000, guid: 2d4293d6e2cbf9b428249f1309e5c816, type: 2}
   executionOrder: 0

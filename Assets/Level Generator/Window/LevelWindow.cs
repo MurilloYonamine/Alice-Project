@@ -9,6 +9,8 @@ namespace LEVEL_GENERATOR.WINDOW {
         [field: SerializeField] public int Column { get; private set; } = 2;
         [field: SerializeField] public List<SquareRow> squareStates = new List<SquareRow>();
 
+        [field: SerializeField] private SquareStates _leftClick = SquareStates.Structure;
+        [field: SerializeField] private SquareStates _rightClick = SquareStates.Empty;
 
         [MenuItem("Window/Level Generator")]
         public static void ShowWindow() {
@@ -18,19 +20,14 @@ namespace LEVEL_GENERATOR.WINDOW {
         void OnGUI() {
             EnsureSquareStatesInitialized();
 
-            GUILayout.Label("Level Generator", EditorStyles.boldLabel);
+            DrawLevelConfigurationFields();
 
-            DrawRowColumnFields();
-
-            GUILayout.FlexibleSpace();
+            GUILayout.Space(20);
 
             UpdateSquareStatesIfNeeded();
 
             DrawSquaresGrid();
 
-            GUILayout.FlexibleSpace();
-
-            DrawCreateLevelButton();
         }
         /// <summary> Garante que a lista squareStates está inicializada corretamente e corresponde aos valores atuais de Row e Column. </summary>
         private void EnsureSquareStatesInitialized() {
@@ -51,14 +48,55 @@ namespace LEVEL_GENERATOR.WINDOW {
         }
 
         /// <summary> Desenha os campos de entrada para Row e Column. </summary>
-        private void DrawRowColumnFields() {
-            Row = EditorGUILayout.IntField("Row", Row);
+        private void DrawLevelConfigurationFields() {
+            GUIStyle titleStyle = new GUIStyle(EditorStyles.boldLabel) {
+                fontSize = 48,
+                alignment = TextAnchor.MiddleCenter
+            };
+
+            string title = "Level Generator";
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            for (int i = 0; i < title.Length; i++) {
+                Color prevColor = GUI.color;
+                GUI.color = Color.HSVToRGB((Time.realtimeSinceStartup + i * 0.1f) % 1, 1, 1);
+                GUILayout.Label(title[i].ToString(), titleStyle);
+                GUI.color = prevColor;
+            }
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(10);
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            Row = EditorGUILayout.IntField("Número de Linhas:", Row, GUILayout.Width(200));
             if (Row < 2) Row = 2;
-
-            Column = EditorGUILayout.IntField("Column", Column);
+            GUILayout.Space(20);
+            Column = EditorGUILayout.IntField("Número de Colunas:", Column, GUILayout.Width(200));
             if (Column < 2) Column = 2;
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
 
-            if (GUILayout.Button("Reset")) ResetWindow();
+            GUILayout.Space(10);
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label("Botão Esquerdo:", GUILayout.Width(100));
+            _leftClick = (SquareStates)EditorGUILayout.EnumPopup(_leftClick, GUILayout.Width(100));
+            GUILayout.Space(20);
+            GUILayout.Label("Botão Direito:", GUILayout.Width(100));
+            _rightClick = (SquareStates)EditorGUILayout.EnumPopup(_rightClick, GUILayout.Width(100));
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            GUILayout.Space(10);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Resetar Level", GUILayout.Width(250))) ResetWindow();
+            if (GUILayout.Button("Criar Dados do Level", GUILayout.Width(250))) CreateSerializedObject();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
         }
 
         /// <summary> Atualiza os estados dos quadrados se Row ou Column forem alterados. </summary>
@@ -92,19 +130,25 @@ namespace LEVEL_GENERATOR.WINDOW {
 
         /// <summary> Desenha a grade de quadrados baseada nos valores atuais de Row e Column. </summary>
         private void DrawSquaresGrid() {
-            float width = 40;
-            float height = 40;
+            float width = 24;
+            float height = 24;
 
             // Desenha a grade de quadrados
             for (int x = 0; x < Row; x++) {
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
                 for (int y = 0; y < Column; y++) {
+
                     Color choiceColor = GetColorForOption(squareStates[x].squares[y]);
                     Color prevColor = GUI.backgroundColor;
                     GUI.backgroundColor = choiceColor;
-                    if (GUILayout.Button("", GUILayout.Width(width), GUILayout.Height(height)))
-                        squareStates[x].squares[y] = (SquareStates)(((int)squareStates[x].squares[y] + 1) % 3);
+
+                    Rect buttonRect = GUILayoutUtility.GetRect(width, height);
+                    if (GUI.Button(buttonRect, GUIContent.none)) {
+                        bool isRightButton = Event.current.button == 1;
+                        UpdateSquareState(x, y, isRightButton);
+                    }
+
                     GUI.backgroundColor = prevColor;
                 }
                 GUILayout.FlexibleSpace();
@@ -112,10 +156,17 @@ namespace LEVEL_GENERATOR.WINDOW {
             }
         }
 
-        /// <summary> Desenha o botão para criar os dados do nível. </summary>
-        private void DrawCreateLevelButton() {
-            if (GUILayout.Button("Create Level Data"))
-                CreateSerializedObject();
+        private SquareStates UpdateSquareState(int x, int y, bool isRightClick = false) {
+            SquareStates mouseClick = isRightClick ? _rightClick : _leftClick;
+
+            switch (mouseClick) {
+                case SquareStates.Empty: squareStates[x].squares[y] = SquareStates.Empty; break;
+                case SquareStates.Structure: squareStates[x].squares[y] = SquareStates.Structure; break;
+                case SquareStates.Enemy: squareStates[x].squares[y] = SquareStates.Enemy; break;
+                default: squareStates[x].squares[y] = SquareStates.Empty; break;
+            }
+
+            return mouseClick;
         }
 
         /// <summary> Reseta a janela para os valores padrão. </summary>
