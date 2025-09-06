@@ -13,9 +13,6 @@ namespace COMMANDS
     {
         private const char SUB_COMMAND_IDENTIFIER = '.';
         public const string DATABASE_CHARACTERS_BASE = "characters";
-        public const string DATABASE_CHARACTERS_SPRITE = "characters_sprite";
-        public const string DATABASE_CHARACTERS_LIVE2D = "characters_live2D";
-        public const string DATABASE_CHARACTERS_Model3D = "characters_model3D";
 
         public static CommandManager instance { get; private set; }
 
@@ -81,9 +78,8 @@ namespace COMMANDS
             }
 
             string characterName = databaseName;
-            //If we've made it here then we should try to run as a character command
-            if (CharacterManager.instance.HasCharacter(characterName))
-            {
+            
+            if (CharacterManager.instance.HasCharacter(characterName)) {
                 List<string> newArgs = new List<string>(args);
                 newArgs.Insert(0, characterName);
                 args = newArgs.ToArray();
@@ -97,34 +93,14 @@ namespace COMMANDS
 
         private CoroutineWrapper ExecuteCharacterCommand(string commandName, params string[] args)
         {
-            Delegate command = null;
-
+            // Only use base character database since we only have text characters
             CommandDatabase db = subDatabases[DATABASE_CHARACTERS_BASE];
-            if (db.HasCommand(commandName))
+            
+            if (db != null && db.HasCommand(commandName))
             {
-                command = db.GetCommand(commandName);
+                Delegate command = db.GetCommand(commandName);
                 return StartProcess(commandName, command, args);
             }
-
-            CharacterConfigData characterConfigData = CharacterManager.instance.GetCharacterConfig(args[0]);
-            switch (characterConfigData.characterType)
-            {
-                case Character.CharacterType.Sprite:
-                case Character.CharacterType.SpriteSheet:
-                    db = subDatabases[DATABASE_CHARACTERS_SPRITE];
-                    break;
-                case Character.CharacterType.Live2D:
-                    db = subDatabases[DATABASE_CHARACTERS_LIVE2D];
-                    break;
-                case Character.CharacterType.Model3D:
-                    db = subDatabases[DATABASE_CHARACTERS_Model3D];
-                    break;
-            }
-
-            command = db.GetCommand(commandName);
-
-            if (command != null)
-                return StartProcess(commandName, command, args);
 
             Debug.LogError($"Command Manager was unable to execute command '{commandName}' on character '{args[0]}'. The character name or command may be invalid.");
             return null;
@@ -153,8 +129,6 @@ namespace COMMANDS
         {
             foreach (var c in activeProcesses)
             {
-                //Debug.Log($"Stop process '{c.command}({string.Join(',', c.args)}) [term={c.onTerminateAction}]'");
-
                 if (c.runningProcess != null && !c.runningProcess.IsDone)
                     c.runningProcess.Stop();
 
