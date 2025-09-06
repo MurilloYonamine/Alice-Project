@@ -195,7 +195,8 @@ namespace LEVEL_GENERATOR.WINDOW {
                 levelData.Squares.Add(newRow);
             }
 
-            string path = EditorUtility.SaveFilePanelInProject("Save Level Data", "New Level Data", "asset", "Please enter a file name to save the level data to");
+            const string LEVELS_PATH = "Assets/_MAIN/Resources/Levels";
+            string path = EditorUtility.SaveFilePanelInProject("Save Level Data", "New Level Data", "asset", "Please enter a file name to save the level data to", LEVELS_PATH);
 
             if (string.IsNullOrEmpty(path)) return;
 

@@ -17,8 +17,8 @@ namespace LEVEL_GENERATOR.EDITOR {
                 return;
             }
 
-            float width = 40;
-            float height = 40;
+            float width = 24;
+            float height = 24;
 
             GUILayout.Space(10);
             GUILayout.Label("Level Preview", EditorStyles.boldLabel);
