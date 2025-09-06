@@ -1,8 +1,12 @@
 using System.Collections.Generic;
+using System.ComponentModel;
+using UnityEngine;
 
-namespace LEVEL_GENERATOR {
+namespace LEVELGENERATOR.DATA {
     [System.Serializable]
     public class SquareRow {
-        public List<SquareStates> squares = new List<SquareStates>();
+        [field: SerializeField, ReadOnly(true)] private readonly string name = "Row";
+        public List<SquareStates> rowElements = new List<SquareStates>();
     }
+
 }

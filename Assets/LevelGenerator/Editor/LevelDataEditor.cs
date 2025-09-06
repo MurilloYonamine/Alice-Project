@@ -1,7 +1,8 @@
+using LEVELGENERATOR.DATA;
 using UnityEditor;
 using UnityEngine;
 
-namespace LEVEL_GENERATOR.EDITOR {
+namespace LEVELGENERATOR.EDITOR {
     [CustomEditor(typeof(LevelData))]
     public class LevelDataEditor : Editor {
 
@@ -27,8 +28,8 @@ namespace LEVEL_GENERATOR.EDITOR {
             for (int x = 0; x < levelData.Squares.Count; x++) {
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                for (int y = 0; y < levelData.Squares[x].squares.Count; y++) {
-                    Color choiceColor = GetColorForOption(levelData.Squares[x].squares[y]);
+                for (int y = 0; y < levelData.Squares[x].rowElements.Count; y++) {
+                    Color choiceColor = GetColorForOption(levelData.Squares[x].rowElements[y]);
                     Rect rect = GUILayoutUtility.GetRect(width, height, GUILayout.Width(width), GUILayout.Height(height));
                     EditorGUI.DrawRect(rect, choiceColor);
                 }

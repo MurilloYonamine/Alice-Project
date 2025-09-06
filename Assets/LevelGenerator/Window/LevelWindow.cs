@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using EditorAttributes;
+using LEVELGENERATOR.DATA;
 using UnityEditor;
 using UnityEngine;
 
-namespace LEVEL_GENERATOR.WINDOW {
+namespace LEVELGENERATOR.WINDOW {
     public class LevelWindow : EditorWindow {
-        [field: SerializeField] public int Row { get; private set; } = 2;
-        [field: SerializeField] public int Column { get; private set; } = 2;
+        [field: SerializeField, ReadOnly] public const int ROW = 23;
+        [field: SerializeField, ReadOnly] public const int COLUMN = 10;
         [field: SerializeField] public List<SquareRow> squareStates = new List<SquareRow>();
 
         [field: SerializeField] private SquareStates _leftClick = SquareStates.Structure;
@@ -35,15 +36,15 @@ namespace LEVEL_GENERATOR.WINDOW {
             if (squareStates == null) squareStates = new List<SquareRow>();
 
             // Ajusta número de linhas
-            while (squareStates.Count < Row) squareStates.Add(new SquareRow());
-            while (squareStates.Count > Row) squareStates.RemoveAt(squareStates.Count - 1);
+            while (squareStates.Count < ROW) squareStates.Add(new SquareRow());
+            while (squareStates.Count > ROW) squareStates.RemoveAt(squareStates.Count - 1);
 
             // Ajusta número de colunas em cada linha
-            for (int x = 0; x < Row; x++) {
+            for (int x = 0; x < ROW; x++) {
                 var row = squareStates[x];
-                if (row.squares == null) row.squares = new List<SquareStates>();
-                while (row.squares.Count < Column) row.squares.Add(SquareStates.Empty);
-                while (row.squares.Count > Column) row.squares.RemoveAt(row.squares.Count - 1);
+                if (row.rowElements == null) row.rowElements = new List<SquareStates>();
+                while (row.rowElements.Count < COLUMN) row.rowElements.Add(SquareStates.Empty);
+                while (row.rowElements.Count > COLUMN) row.rowElements.RemoveAt(row.rowElements.Count - 1);
             }
         }
 
@@ -71,11 +72,9 @@ namespace LEVEL_GENERATOR.WINDOW {
             GUILayout.Space(10);
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            Row = EditorGUILayout.IntField("Número de Linhas:", Row, GUILayout.Width(200));
-            if (Row < 2) Row = 2;
+            EditorGUILayout.IntField("Número de Linhas:", ROW, GUILayout.Width(200));
             GUILayout.Space(20);
-            Column = EditorGUILayout.IntField("Número de Colunas:", Column, GUILayout.Width(200));
-            if (Column < 2) Column = 2;
+            EditorGUILayout.IntField("Número de Colunas:", COLUMN, GUILayout.Width(200));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
@@ -97,22 +96,30 @@ namespace LEVEL_GENERATOR.WINDOW {
             if (GUILayout.Button("Criar Dados do Level", GUILayout.Width(250))) CreateSerializedObject();
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+
+
+            GUILayout.Space(10);
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Gerar Level de Teste", GUILayout.Width(250))) GenerateATestLevel();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
         }
 
         /// <summary> Atualiza os estados dos quadrados se Row ou Column forem alterados. </summary>
         private void UpdateSquareStatesIfNeeded() {
-            bool isRowCountDifferent = squareStates.Count != Row;
-            bool isColumnCountDifferent = Row > 0 && squareStates[0].squares.Count != Column;
+            bool isRowCountDifferent = squareStates.Count != ROW;
+            bool isColumnCountDifferent = ROW > 0 && squareStates[0].rowElements.Count != COLUMN;
 
             // Reinicializa a lista se o número de linhas ou colunas mudou
             if (isRowCountDifferent || isColumnCountDifferent) {
                 squareStates = new List<SquareRow>();
 
-                for (int i = 0; i < Row; i++) {
+                for (int i = 0; i < ROW; i++) {
                     squareStates.Add(new SquareRow());
 
-                    for (int j = 0; j < Column; j++)
-                        squareStates[i].squares.Add(SquareStates.Empty);
+                    for (int j = 0; j < COLUMN; j++)
+                        squareStates[i].rowElements.Add(SquareStates.Empty);
 
                 }
             }
@@ -134,12 +141,12 @@ namespace LEVEL_GENERATOR.WINDOW {
             float height = 24;
 
             // Desenha a grade de quadrados
-            for (int x = 0; x < Row; x++) {
+            for (int x = 0; x < ROW; x++) {
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                for (int y = 0; y < Column; y++) {
+                for (int y = 0; y < COLUMN; y++) {
 
-                    Color choiceColor = GetColorForOption(squareStates[x].squares[y]);
+                    Color choiceColor = GetColorForOption(squareStates[x].rowElements[y]);
                     Color prevColor = GUI.backgroundColor;
                     GUI.backgroundColor = choiceColor;
 
@@ -160,10 +167,10 @@ namespace LEVEL_GENERATOR.WINDOW {
             SquareStates mouseClick = isRightClick ? _rightClick : _leftClick;
 
             switch (mouseClick) {
-                case SquareStates.Empty: squareStates[x].squares[y] = SquareStates.Empty; break;
-                case SquareStates.Structure: squareStates[x].squares[y] = SquareStates.Structure; break;
-                case SquareStates.Enemy: squareStates[x].squares[y] = SquareStates.Enemy; break;
-                default: squareStates[x].squares[y] = SquareStates.Empty; break;
+                case SquareStates.Empty: squareStates[x].rowElements[y] = SquareStates.Empty; break;
+                case SquareStates.Structure: squareStates[x].rowElements[y] = SquareStates.Structure; break;
+                case SquareStates.Enemy: squareStates[x].rowElements[y] = SquareStates.Enemy; break;
+                default: squareStates[x].rowElements[y] = SquareStates.Empty; break;
             }
 
             return mouseClick;
@@ -171,14 +178,43 @@ namespace LEVEL_GENERATOR.WINDOW {
 
         /// <summary> Reseta a janela para os valores padrão. </summary>
         private void ResetWindow() {
-            Row = 2;
-            Column = 2;
+            // ROW = 23;
+            // COLUMN = 10;
             squareStates = new List<SquareRow>(2);
-            for (int x = 0; x < Row; x++) {
+            for (int x = 0; x < ROW; x++) {
                 squareStates.Add(new SquareRow());
 
-                for (int y = 0; y < Column; y++)
-                    squareStates[x].squares.Add(SquareStates.Empty);
+                for (int y = 0; y < COLUMN; y++)
+                    squareStates[x].rowElements.Add(SquareStates.Empty);
+            }
+        }
+        private void GenerateATestLevel() {
+            ResetWindow();
+
+            System.Random rand = new System.Random();
+            int lastStructureRow = -5;
+            const int FIRST_ROW = 2;
+
+            for (int x = FIRST_ROW; x < ROW; x++) {
+                if (x - lastStructureRow < 3) continue;
+
+                int structureLength = rand.Next(1, 5);
+                int startY = rand.Next(0, COLUMN - structureLength + 1);
+
+                // Coloca a estrutura
+                for (int y = startY; y < startY + structureLength; y++) {
+                    squareStates[x].rowElements[y] = SquareStates.Structure;
+                }
+
+                // Coloca apenas 1 inimigo acima da estrutura
+                if (x > 0) {
+                    int enemyY = rand.Next(startY, startY + structureLength);
+                    if (squareStates[x - 1].rowElements[enemyY] == SquareStates.Empty) {
+                        squareStates[x - 1].rowElements[enemyY] = SquareStates.Enemy;
+                    }
+                }
+
+                lastStructureRow = x;
             }
         }
 
@@ -191,7 +227,7 @@ namespace LEVEL_GENERATOR.WINDOW {
             // Copia os estados dos quadrados para o novo LevelData
             foreach (var row in squareStates) {
                 var newRow = new SquareRow();
-                newRow.squares.AddRange(row.squares);
+                newRow.rowElements.AddRange(row.rowElements);
                 levelData.Squares.Add(newRow);
             }
 
@@ -202,6 +238,8 @@ namespace LEVEL_GENERATOR.WINDOW {
 
             AssetDatabase.CreateAsset(levelData, path);
             AssetDatabase.SaveAssets();
+
+            ResetWindow();
 
             Debug.Log("Level Data asset foi criado com sucesso!");
             Debug.Log("Foi criado o asset em: " + path);
