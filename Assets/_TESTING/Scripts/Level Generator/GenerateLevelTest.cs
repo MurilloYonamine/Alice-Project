@@ -28,7 +28,7 @@ namespace LEVELGENERATOR.TESTING {
                 for (int y = 0; y < _levelData.Squares[x].rowElements.Count; y++) {
                     Vector3Int coordinate = new(y, x, 0);
                     switch (_levelData.Squares[x].rowElements[y]) {
-                        case SquareStates.Structure:
+                        case SquareStates.Ground:
                             _tilemap.SetTile(CoordinateConverter.GetTileCoordinate(coordinate, bounds), StructureTile);
                             break;
                         case SquareStates.Enemy:

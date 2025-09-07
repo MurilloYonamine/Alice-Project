@@ -41,7 +41,7 @@ namespace LEVELGENERATOR.EDITOR {
         private Color GetColorForOption(SquareStates option) {
             switch (option) {
                 case SquareStates.Empty: return Color.gray;
-                case SquareStates.Structure: return Color.yellow;
+                case SquareStates.Ground: return Color.yellow;
                 case SquareStates.Enemy: return Color.red;
                 default: return Color.white;
             }

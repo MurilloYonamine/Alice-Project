@@ -10,7 +10,7 @@ namespace LEVELGENERATOR.WINDOW {
         [field: SerializeField, ReadOnly] public const int COLUMN = 10;
         [field: SerializeField] public List<SquareRow> squareStates = new List<SquareRow>();
 
-        [field: SerializeField] private SquareStates _leftClick = SquareStates.Structure;
+        [field: SerializeField] private SquareStates _leftClick = SquareStates.Ground;
         [field: SerializeField] private SquareStates _rightClick = SquareStates.Empty;
 
         [MenuItem("Window/Level Generator")]
@@ -129,7 +129,7 @@ namespace LEVELGENERATOR.WINDOW {
         private Color GetColorForOption(SquareStates option) {
             switch (option) {
                 case SquareStates.Empty: return Color.white;
-                case SquareStates.Structure: return Color.yellow;
+                case SquareStates.Ground: return Color.yellow;
                 case SquareStates.Enemy: return Color.red;
                 default: return Color.white;
             }
@@ -168,7 +168,7 @@ namespace LEVELGENERATOR.WINDOW {
 
             switch (mouseClick) {
                 case SquareStates.Empty: squareStates[x].rowElements[y] = SquareStates.Empty; break;
-                case SquareStates.Structure: squareStates[x].rowElements[y] = SquareStates.Structure; break;
+                case SquareStates.Ground: squareStates[x].rowElements[y] = SquareStates.Ground; break;
                 case SquareStates.Enemy: squareStates[x].rowElements[y] = SquareStates.Enemy; break;
                 default: squareStates[x].rowElements[y] = SquareStates.Empty; break;
             }
@@ -204,7 +204,7 @@ namespace LEVELGENERATOR.WINDOW {
 
                 // Coloca a estrutura
                 for (int y = startY; y < startY + structureLength; y++) {
-                    squareStates[x].rowElements[y] = SquareStates.Structure;
+                    squareStates[x].rowElements[y] = SquareStates.Ground;
                 }
 
                 // Coloca apenas 1 inimigo acima da estrutura

@@ -10,13 +10,13 @@ namespace LEVELGENERATOR {
         public static LevelGeneratorManager Instance { get; private set; }
 
         [Header("Tilemaps")]
-        [field: SerializeField] public Tilemap StructureTilemap { get; private set; }
+        [field: SerializeField] public Tilemap GroundTilemap { get; private set; }
         [field: SerializeField] public Tilemap EmptyTilemap { get; private set; }
         [field: SerializeField] public Tilemap EnemyTilemap { get; private set; }
         private BoundsInt _bounds;
 
         [Header("Tiles")]
-        [SerializeField] private TileBase _structureTile;
+        [SerializeField] private TileBase _groundTile;
         [SerializeField] private TileBase _enemyTile;
         [SerializeField] private TileBase _emptyTile;
 
@@ -40,11 +40,11 @@ namespace LEVELGENERATOR {
             _levels = new List<LevelData>(Resources.LoadAll<LevelData>(LEVEL_PATH));
             LevelSize = _levels[0].Squares.Count - 1;
 
-            StructureTilemap.CompressBounds();
+            GroundTilemap.CompressBounds();
             EmptyTilemap.CompressBounds();
             EnemyTilemap.CompressBounds();
 
-            _bounds = StructureTilemap.cellBounds;
+            _bounds = GroundTilemap.cellBounds;
 
             AdvanceToNextLevel();
         }
@@ -75,7 +75,7 @@ namespace LEVELGENERATOR {
 
                 switch (currentSquareState) {
                     case SquareStates.Empty: EmptyTilemap.SetTile(convertedCoordinate, _emptyTile); break;
-                    case SquareStates.Structure: StructureTilemap.SetTile(convertedCoordinate, _structureTile); break;
+                    case SquareStates.Ground: GroundTilemap.SetTile(convertedCoordinate, _groundTile); break;
                     case SquareStates.Enemy: EnemyTilemap.SetTile(convertedCoordinate, _enemyTile); break;
                     default: break;
                 }
