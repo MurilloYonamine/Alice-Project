@@ -188,6 +188,7 @@ namespace LEVELGENERATOR.WINDOW {
                     squareStates[x].rowElements.Add(SquareStates.Empty);
             }
         }
+
         private void GenerateATestLevel() {
             ResetWindow();
 
