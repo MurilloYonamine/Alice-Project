@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ENEMY;
 using LEVELGENERATOR.DATA;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -12,12 +13,10 @@ namespace LEVELGENERATOR {
         [Header("Tilemaps")]
         [field: SerializeField] public Tilemap GroundTilemap { get; private set; }
         [field: SerializeField] public Tilemap EmptyTilemap { get; private set; }
-        [field: SerializeField] public Tilemap EnemyTilemap { get; private set; }
         private BoundsInt _bounds;
 
         [Header("Tiles")]
         [SerializeField] private TileBase _groundTile;
-        [SerializeField] private TileBase _enemyTile;
         [SerializeField] private TileBase _emptyTile;
 
         [Header("Levels")]
@@ -27,6 +26,9 @@ namespace LEVELGENERATOR {
         private int _globalRowIndex = 0;
         public int LevelSize { get; private set; }
 
+        [SerializeField] private GameObject _enemyPrefab;
+        [SerializeField] private Transform _enemyParent;
+
         private void Awake() {
             if (Instance != null) {
                 Destroy(gameObject);
@@ -34,19 +36,33 @@ namespace LEVELGENERATOR {
             }
             Instance = this;
         }
-        private void Start() {
+        public void Start() {
             const string LEVEL_PATH = "Levels/";
 
             _levels = new List<LevelData>(Resources.LoadAll<LevelData>(LEVEL_PATH));
             LevelSize = _levels[0].Squares.Count - 1;
 
+            GetAllEnemies();
+
+
             GroundTilemap.CompressBounds();
             EmptyTilemap.CompressBounds();
-            EnemyTilemap.CompressBounds();
 
             _bounds = GroundTilemap.cellBounds;
-
-            AdvanceToNextLevel();
+        }
+        private void GetAllEnemies() {
+            int enemyCount = 0;
+            foreach (LevelData level in _levels) {
+                foreach (SquareRow row in level.Squares) {
+                    foreach (SquareStates state in row.rowElements) {
+                        if (state == SquareStates.Enemy) {
+                            enemyCount++;
+                        }
+                    }
+                }
+            }
+            EnemyPoolManager.Instance.amountToPool = enemyCount;
+            EnemyPoolManager.Instance.Initialize();
         }
         public void AdvanceToNextLevel() {
             if (_currentLevelIndex >= _levels.Count) {
@@ -76,7 +92,18 @@ namespace LEVELGENERATOR {
                 switch (currentSquareState) {
                     case SquareStates.Empty: EmptyTilemap.SetTile(convertedCoordinate, _emptyTile); break;
                     case SquareStates.Ground: GroundTilemap.SetTile(convertedCoordinate, _groundTile); break;
-                    case SquareStates.Enemy: EnemyTilemap.SetTile(convertedCoordinate, _enemyTile); break;
+                    case SquareStates.Enemy:
+                        EnemyPoolManager enemyPool = EnemyPoolManager.Instance;
+                        GameObject enemy = enemyPool.GetPooledObject();
+
+                        enemy.SetActive(true);
+
+                        float offset = 0.5f;
+                        Vector3 enemyPosition = new Vector3(convertedCoordinate.x + offset, convertedCoordinate.y + offset, 0f);
+                        enemy.transform.position = enemyPosition;
+
+                        enemy.name = $"Enemy ({_globalRowIndex}, {x})";
+                        break;
                     default: break;
                 }
             }

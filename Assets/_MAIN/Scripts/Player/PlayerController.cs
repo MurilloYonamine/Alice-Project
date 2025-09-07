@@ -16,7 +16,7 @@ namespace PLAYER {
         [SerializeField] private LayerMask _groundLayer;
 
         [Header("Movement")]
-        [SerializeField] private Vector3 _movement;
+        [SerializeField] private Vector2 _movement;
         [SerializeField] private float _speed = 5f;
 
         [Header("Generation Control")]
@@ -58,18 +58,28 @@ namespace PLAYER {
         private void OnDestroy() {
             _playerInput?.Dispose();
         }
+        private bool _hasTriggeredAdvance = false;
         private void GetCurrentLocation() {
+            // Pega a altura da tilemap e a posição do player
             int tilemapHeight = LevelGeneratorManager.Instance.EmptyTilemap.size.y;
             Vector3Int playerWorldPosition = Vector3Int.RoundToInt(transform.position);
-            Vector3Int playerCellPosition = Vector3Int.RoundToInt(LevelGeneratorManager.Instance.EmptyTilemap.WorldToCell(playerWorldPosition));
+            Vector3Int playerCellPosition = LevelGeneratorManager.Instance.EmptyTilemap.WorldToCell(playerWorldPosition);
 
+            // Centraliza a posição do player na tilemap
             int playerY = playerCellPosition.y - 9;
             int currentMid = tilemapHeight == _levelSize ? tilemapHeight / 2 : _levelSize + _lastMid;
 
-            if (playerY == -currentMid) {
+            // Checa se passou da metade e ainda não avançou
+            if (!_hasTriggeredAdvance && playerY <= -currentMid) {
+                _hasTriggeredAdvance = true; // trava para não chamar várias vezes
                 LevelEvents.PlayerAdvanceChunk();
                 _lastHeight = tilemapHeight;
                 _lastMid = currentMid;
+            }
+
+            // Reset quando subir para o próximo nível
+            if (playerY < -_lastHeight) {
+                _hasTriggeredAdvance = false;
             }
         }
         private void OnCollisionEnter2D(Collision2D collision2D) {

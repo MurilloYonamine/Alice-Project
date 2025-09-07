@@ -1,17 +1,16 @@
 using UnityEngine;
 
 namespace PLAYER {
-    [System.Serializable]
     public class PlayerJump {
         private readonly Rigidbody2D _rigidBody2D;
         private readonly LayerMask _groundLayer;
-        
+
         [Header("Jump Settings")]
-        [SerializeField] private float _jumpForce = 12f;
-        [SerializeField] private float _jumpCutMultiplier = 0.5f;
-        [SerializeField] private float _fallMultiplier = 4f;
-        [SerializeField] private float _lowJumpMultiplier = 3f;
-        [SerializeField] private float _maxFallSpeed = 18f;
+        private float _jumpForce = 12f;
+        private float _jumpCutMultiplier = 0.5f;
+        private float _fallMultiplier = 4f;
+        private float _lowJumpMultiplier = 3f;
+        private float _maxFallSpeed = 18f;
 
         private bool _isGrounded;
         private bool _jumpPressed;
