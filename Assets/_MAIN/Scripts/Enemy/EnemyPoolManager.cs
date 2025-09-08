@@ -46,9 +46,4 @@ public class EnemyPoolManager : MonoBehaviour {
         }
         return null;
     }
-    public GameObject ReturnToPool(GameObject obj) {
-        obj.transform.SetParent(pooledObjectsContainer.transform);
-        obj.SetActive(false);
-        return obj;
-    }
 }

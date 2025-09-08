@@ -110,27 +110,20 @@ namespace PLAYER.INPUT
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""TouchMove"",
-                    ""type"": ""Value"",
-                    ""id"": ""a1b2c3d4-e5f6-7890-abcd-ef1234567890"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""TouchJump"",
-                    ""type"": ""Button"",
-                    ""id"": ""b2c3d4e5-f6g7-8901-bcde-f23456789012"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": ""MultiTap(tapTime=0.3,tapDelay=0.5,tapCount=2)"",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""978bfe49-cc26-4a3d-ab7b-7d7a29327403"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
                 {
                     ""name"": ""WASD"",
                     ""id"": ""00ca640b-d935-4593-8157-c05846ea39b3"",
@@ -187,37 +180,37 @@ namespace PLAYER.INPUT
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Two Modifiers"",
-                    ""id"": ""9de3b805-9fb5-45aa-a8fc-74e0c8d62dce"",
-                    ""path"": ""TwoModifiers"",
+                    ""name"": """",
+                    ""id"": ""1635d3fe-58b6-4ba9-a4e2-f4b964f6b5c8"",
+                    ""path"": ""<XRController>/{Primary2DAxis}"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""XR"",
                     ""action"": ""Move"",
-                    ""isComposite"": true,
+                    ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier1"",
-                    ""id"": ""0e3e8232-9902-4cec-a090-3df0ed8aabd4"",
-                    ""path"": """",
+                    ""name"": """",
+                    ""id"": ""3ea4d645-4504-4529-b061-ab81934c3752"",
+                    ""path"": ""<Joystick>/stick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Joystick"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""modifier2"",
-                    ""id"": ""30aec164-b18b-4add-9f71-1846166b7c78"",
+                    ""name"": """",
+                    ""id"": ""ba031d68-1555-4bc5-9d45-a902204ec199"",
                     ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Move"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": true
+                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -227,39 +220,6 @@ namespace PLAYER.INPUT
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a5a80648-42c5-4eea-94e7-19fee6fa5d04"",
-                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Touch"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""touch-move-binding"",
-                    ""path"": ""<Touchscreen>/primaryTouch/delta"",
-                    ""interactions"": """",
-                    ""processors"": ""ScaleVector2(x=0.01,y=0)"",
-                    ""groups"": ""Touch"",
-                    ""action"": ""TouchMove"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""touch-jump-binding"",
-                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
-                    ""interactions"": ""MultiTap(tapTime=0.3,tapDelay=0.5,tapCount=2)"",
-                    ""processors"": """",
-                    ""groups"": ""Touch"",
-                    ""action"": ""TouchJump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -849,8 +809,6 @@ namespace PLAYER.INPUT
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-            m_Player_TouchMove = m_Player.FindAction("TouchMove", throwIfNotFound: true);
-            m_Player_TouchJump = m_Player.FindAction("TouchJump", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -946,8 +904,6 @@ namespace PLAYER.INPUT
         private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
         private readonly InputAction m_Player_Move;
         private readonly InputAction m_Player_Jump;
-        private readonly InputAction m_Player_TouchMove;
-        private readonly InputAction m_Player_TouchJump;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -967,14 +923,6 @@ namespace PLAYER.INPUT
             /// Provides access to the underlying input action "Player/Jump".
             /// </summary>
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/TouchMove".
-            /// </summary>
-            public InputAction @TouchMove => m_Wrapper.m_Player_TouchMove;
-            /// <summary>
-            /// Provides access to the underlying input action "Player/TouchJump".
-            /// </summary>
-            public InputAction @TouchJump => m_Wrapper.m_Player_TouchJump;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1007,12 +955,6 @@ namespace PLAYER.INPUT
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @TouchMove.started += instance.OnTouchMove;
-                @TouchMove.performed += instance.OnTouchMove;
-                @TouchMove.canceled += instance.OnTouchMove;
-                @TouchJump.started += instance.OnTouchJump;
-                @TouchJump.performed += instance.OnTouchJump;
-                @TouchJump.canceled += instance.OnTouchJump;
             }
 
             /// <summary>
@@ -1030,12 +972,6 @@ namespace PLAYER.INPUT
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
-                @TouchMove.started -= instance.OnTouchMove;
-                @TouchMove.performed -= instance.OnTouchMove;
-                @TouchMove.canceled -= instance.OnTouchMove;
-                @TouchJump.started -= instance.OnTouchJump;
-                @TouchJump.performed -= instance.OnTouchJump;
-                @TouchJump.canceled -= instance.OnTouchJump;
             }
 
             /// <summary>
@@ -1350,20 +1286,6 @@ namespace PLAYER.INPUT
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnJump(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "TouchMove" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnTouchMove(InputAction.CallbackContext context);
-            /// <summary>
-            /// Method invoked when associated input action "TouchJump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-            /// </summary>
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnTouchJump(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

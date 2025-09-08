@@ -1,7 +1,9 @@
+
 using LEVELGENERATOR;
 using PLAYER.INPUT;
-using TMPro;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PLAYER {
     public class PlayerController : MonoBehaviour {
@@ -22,11 +24,6 @@ namespace PLAYER {
         private int _lastMid;
         private int _levelSize;
 
-        [SerializeField] private float knockbackForce = 10f;
-
-        [Header("Score Test")]
-        [SerializeField] private TextMeshProUGUI _scoreText;
-        private int score;
         private void Start() {
             _playerInput = new PlayerInputHandler();
             _rigidBody2D = GetComponent<Rigidbody2D>();
@@ -35,23 +32,16 @@ namespace PLAYER {
             _playerJump = new PlayerJump(_rigidBody2D, _groundLayer);
 
             _levelSize = LevelGeneratorManager.Instance.LevelSize;
-            LevelGeneratorManager.Instance.AdvanceToNextLevel();
         }
         private void OnEnable() {
             InputEvents.OnPlayerMove += HandleMoveInput;
-            InputEvents.OnPlayerTouchMove += HandleTouchMoveInput;
             InputEvents.OnPlayerJump += HandlePlayerJump;
-            InputEvents.OnPlayerTouchJump += HandlePlayerTouchJump;
             InputEvents.OnPlayerJumpReleased += HandlePlayerJumpReleased;
-            InputEvents.OnPlayerAttack += Attack;
         }
         private void OnDisable() {
             InputEvents.OnPlayerMove -= HandleMoveInput;
-            InputEvents.OnPlayerTouchMove -= HandleTouchMoveInput;
             InputEvents.OnPlayerJump -= HandlePlayerJump;
-            InputEvents.OnPlayerTouchJump -= HandlePlayerTouchJump;
             InputEvents.OnPlayerJumpReleased -= HandlePlayerJumpReleased;
-            InputEvents.OnPlayerAttack -= Attack;
         }
         private void Update() {
             GetCurrentLocation();
@@ -59,20 +49,9 @@ namespace PLAYER {
             _rigidBody2D.linearVelocity = new Vector2(_movement.x * _speed, _rigidBody2D.linearVelocity.y);
         }
         private void HandleMoveInput(Vector2 inputDirection) => _movement = inputDirection;
-        
-        private void HandleTouchMoveInput(Vector2 inputDirection) {
-            // Para mobile, usamos apenas o eixo X (horizontal) do delta de movimento
-            _movement = new Vector2(inputDirection.x, 0);
-        }
-        
         private void HandlePlayerJump() {
             _playerJump.HandleJumpPressed();
         }
-        
-        private void HandlePlayerTouchJump() {
-            _playerJump.HandleJumpPressed();
-        }
-        
         private void HandlePlayerJumpReleased() {
             _playerJump.HandleJumpReleased();
         }
@@ -80,16 +59,6 @@ namespace PLAYER {
             _playerInput?.Dispose();
         }
         private bool _hasTriggeredAdvance = false;
-        private void Attack() {
-            score++;
-            Debug.Log("Score: " + score);
-            ApplyKnockback(Vector2.up);
-            _scoreText.text = score.ToString();
-        }
-        public void ApplyKnockback(Vector2 direction) {
-            _rigidBody2D.linearVelocity = Vector2.zero; // reseta a velocidade atual
-            _rigidBody2D.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
-        }
         private void GetCurrentLocation() {
             // Pega a altura da tilemap e a posição do player
             int tilemapHeight = LevelGeneratorManager.Instance.EmptyTilemap.size.y;

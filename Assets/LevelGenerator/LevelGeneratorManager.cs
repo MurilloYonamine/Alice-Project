@@ -26,6 +26,9 @@ namespace LEVELGENERATOR {
         private int _globalRowIndex = 0;
         public int LevelSize { get; private set; }
 
+        [SerializeField] private GameObject _enemyPrefab;
+        [SerializeField] private Transform _enemyParent;
+
         private void Awake() {
             if (Instance != null) {
                 Destroy(gameObject);
@@ -40,6 +43,7 @@ namespace LEVELGENERATOR {
             LevelSize = _levels[0].Squares.Count - 1;
 
             GetAllEnemies();
+
 
             GroundTilemap.CompressBounds();
             EmptyTilemap.CompressBounds();
@@ -89,7 +93,6 @@ namespace LEVELGENERATOR {
                     case SquareStates.Empty: EmptyTilemap.SetTile(convertedCoordinate, _emptyTile); break;
                     case SquareStates.Ground: GroundTilemap.SetTile(convertedCoordinate, _groundTile); break;
                     case SquareStates.Enemy:
-                        EmptyTilemap.SetTile(convertedCoordinate, _emptyTile);
                         EnemyPoolManager enemyPool = EnemyPoolManager.Instance;
                         GameObject enemy = enemyPool.GetPooledObject();
 

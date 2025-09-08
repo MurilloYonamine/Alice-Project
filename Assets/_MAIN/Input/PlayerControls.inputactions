@@ -22,27 +22,20 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "TouchMove",
-                    "type": "Value",
-                    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "TouchJump",
-                    "type": "Button",
-                    "id": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "MultiTap(tapTime=0.3,tapDelay=0.5,tapCount=2)",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
+                {
+                    "name": "",
+                    "id": "978bfe49-cc26-4a3d-ab7b-7d7a29327403",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
                 {
                     "name": "WASD",
                     "id": "00ca640b-d935-4593-8157-c05846ea39b3",
@@ -100,45 +93,45 @@
                 },
                 {
                     "name": "",
+                    "id": "1635d3fe-58b6-4ba9-a4e2-f4b964f6b5c8",
+                    "path": "<XRController>/{Primary2DAxis}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "XR",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ea4d645-4504-4529-b061-ab81934c3752",
+                    "path": "<Joystick>/stick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Joystick",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba031d68-1555-4bc5-9d45-a902204ec199",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "292c2085-620f-430c-bc51-dac5e9f854f2",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a5a80648-42c5-4eea-94e7-19fee6fa5d04",
-                    "path": "<Touchscreen>/primaryTouch/tap",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Touch",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c1d2e3f4-5678-90ab-cdef-123456789abc",
-                    "path": "<Touchscreen>/primaryTouch/delta",
-                    "interactions": "",
-                    "processors": "ScaleVector2(x=0.01,y=0.01)",
-                    "groups": "Touch",
-                    "action": "TouchMove",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d2e3f4a5-6789-01bc-def0-23456789abcd",
-                    "path": "<Touchscreen>/primaryTouch/tap",
-                    "interactions": "MultiTap(tapTime=0.3,tapDelay=0.5,tapCount=2)",
-                    "processors": "",
-                    "groups": "Touch",
-                    "action": "TouchJump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
