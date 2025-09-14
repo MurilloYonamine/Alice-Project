@@ -1,9 +1,6 @@
-
 using LEVELGENERATOR;
 using PLAYER.INPUT;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace PLAYER {
     public class PlayerController : MonoBehaviour {
@@ -27,11 +24,15 @@ namespace PLAYER {
         private void Start() {
             _playerInput = new PlayerInputHandler();
             _rigidBody2D = GetComponent<Rigidbody2D>();
+            DamageableObject damageable = GetComponent<DamageableObject>();
 
             // Inicializa o sistema de pulo
-            _playerJump = new PlayerJump(_rigidBody2D, _groundLayer);
+            _playerJump = new PlayerJump(_rigidBody2D, _groundLayer, damageable);
 
+            if (LevelGeneratorManager.Instance == null) return;
             _levelSize = LevelGeneratorManager.Instance.LevelSize;
+
+            LevelEvents.PlayerAdvanceChunk();
         }
         private void OnEnable() {
             InputEvents.OnPlayerMove += HandleMoveInput;
@@ -59,8 +60,12 @@ namespace PLAYER {
             _playerInput?.Dispose();
         }
         private bool _hasTriggeredAdvance = false;
+
         private void GetCurrentLocation() {
             // Pega a altura da tilemap e a posição do player
+
+            if (LevelGeneratorManager.Instance == null) return;
+
             int tilemapHeight = LevelGeneratorManager.Instance.EmptyTilemap.size.y;
             Vector3Int playerWorldPosition = Vector3Int.RoundToInt(transform.position);
             Vector3Int playerCellPosition = LevelGeneratorManager.Instance.EmptyTilemap.WorldToCell(playerWorldPosition);

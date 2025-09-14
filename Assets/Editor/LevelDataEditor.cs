@@ -3,10 +3,10 @@ using UnityEditor;
 using UnityEngine;
 
 namespace LEVELGENERATOR.EDITOR {
+        #if UNITY_EDITOR
     [CustomEditor(typeof(LevelData))]
     public class LevelDataEditor : Editor {
 
-        #if UNITY_EDITOR
         public override void OnInspectorGUI() {
             DrawDefaultInspector();
 
@@ -37,7 +37,6 @@ namespace LEVELGENERATOR.EDITOR {
                 GUILayout.EndHorizontal();
             }
         }
-        #endif
         private Color GetColorForOption(SquareStates option) {
             switch (option) {
                 case SquareStates.Empty: return Color.gray;
@@ -47,4 +46,5 @@ namespace LEVELGENERATOR.EDITOR {
             }
         }
     }
+        #endif
 }

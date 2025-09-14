@@ -1,13 +1,12 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using ENEMY;
 using LEVELGENERATOR.DATA;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace LEVELGENERATOR {
-    public class LevelGeneratorManager : MonoBehaviour {
+namespace LEVELGENERATOR
+{
+    public class LevelGeneratorManager : MonoBehaviour
+    {
         public static LevelGeneratorManager Instance { get; private set; }
 
         [Header("Tilemaps")]
@@ -26,17 +25,19 @@ namespace LEVELGENERATOR {
         private int _globalRowIndex = 0;
         public int LevelSize { get; private set; }
 
-        [SerializeField] private GameObject _enemyPrefab;
-        [SerializeField] private Transform _enemyParent;
+        [SerializeField] private GameObject _enemySpawnParent;
 
-        private void Awake() {
-            if (Instance != null) {
+        private void Awake()
+        {
+            if (Instance != null)
+            {
                 Destroy(gameObject);
                 return;
             }
             Instance = this;
         }
-        public void Start() {
+        public void Start()
+        {
             const string LEVEL_PATH = "Levels/";
 
             _levels = new List<LevelData>(Resources.LoadAll<LevelData>(LEVEL_PATH));
@@ -44,18 +45,22 @@ namespace LEVELGENERATOR {
 
             GetAllEnemies();
 
-
             GroundTilemap.CompressBounds();
             EmptyTilemap.CompressBounds();
 
             _bounds = GroundTilemap.cellBounds;
         }
-        private void GetAllEnemies() {
+        private void GetAllEnemies()
+        {
             int enemyCount = 0;
-            foreach (LevelData level in _levels) {
-                foreach (SquareRow row in level.Squares) {
-                    foreach (SquareStates state in row.rowElements) {
-                        if (state == SquareStates.Enemy) {
+            foreach (LevelData level in _levels)
+            {
+                foreach (SquareRow row in level.Squares)
+                {
+                    foreach (SquareStates state in row.rowElements)
+                    {
+                        if (state == SquareStates.Enemy)
+                        {
                             enemyCount++;
                         }
                     }
@@ -64,35 +69,42 @@ namespace LEVELGENERATOR {
             EnemyPoolManager.Instance.amountToPool = enemyCount;
             EnemyPoolManager.Instance.Initialize();
         }
-        public void AdvanceToNextLevel() {
-            if (_currentLevelIndex >= _levels.Count) {
+        public void AdvanceToNextLevel()
+        {
+            if (_currentLevelIndex >= _levels.Count)
+            {
                 Debug.LogWarning("Sem mais nívels para gerar.");
                 return;
             }
 
             LevelData currentLevel = _levels[_currentLevelIndex];
 
-            for (int i = 0; i < LevelSize; i++) {
+            for (int i = 0; i < LevelSize; i++)
+            {
                 AdvanceToNextRow(currentLevel);
             }
-
+            Debug.Log($"Gerando o level {currentLevel}...");
             _currentLevelIndex++;
             _currentRowIndex = 0;
         }
-        private void AdvanceToNextRow(LevelData level) {
+        private void AdvanceToNextRow(LevelData level)
+        {
             LevelData currentLevel = level;
             SquareRow currentRow = currentLevel.Squares[_currentRowIndex];
             int rowSize = currentRow.rowElements.Count;
 
-            for (int x = 0; x < rowSize; x++) {
+            for (int x = 0; x < rowSize; x++)
+            {
                 SquareStates currentSquareState = currentRow.rowElements[x];
                 Vector3Int coordinate = new Vector3Int(x, _globalRowIndex, 0);
                 Vector3Int convertedCoordinate = CoordinateConverter.GetTileCoordinate(coordinate, _bounds);
 
-                switch (currentSquareState) {
+                switch (currentSquareState)
+                {
                     case SquareStates.Empty: EmptyTilemap.SetTile(convertedCoordinate, _emptyTile); break;
                     case SquareStates.Ground: GroundTilemap.SetTile(convertedCoordinate, _groundTile); break;
                     case SquareStates.Enemy:
+                        EmptyTilemap.SetTile(convertedCoordinate, _emptyTile);
                         EnemyPoolManager enemyPool = EnemyPoolManager.Instance;
                         GameObject enemy = enemyPool.GetPooledObject();
 
@@ -103,6 +115,8 @@ namespace LEVELGENERATOR {
                         enemy.transform.position = enemyPosition;
 
                         enemy.name = $"Enemy ({_globalRowIndex}, {x})";
+
+                        enemy.transform.SetParent(_enemySpawnParent.transform);
                         break;
                     default: break;
                 }

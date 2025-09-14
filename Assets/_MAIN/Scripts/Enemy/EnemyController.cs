@@ -1,3 +1,5 @@
+using PLAYER;
+using PLAYER.INPUT;
 using UnityEngine;
 
 namespace ENEMY {
@@ -5,12 +7,15 @@ namespace ENEMY {
         [Header("State Machine")]
         private EnemyState _currentState;
         private IdolState _idolState = new IdolState();
-        private PatrolState _patrolState = new PatrolState();
         private ChaseState _chaseState = new ChaseState();
+        private PatrolState _patrolState = new PatrolState();
 
         [Header("Layers")]
         [SerializeField] private LayerMask _playerLayer;
-        [SerializeField] private LayerMask _groundLayer;
+        [SerializeField] public LayerMask _groundLayer;
+
+        [SerializeField] public Transform _groundDetection;
+        [SerializeField] private GameObject _weapon;
 
         private void Start() {
             ChangeState(_patrolState);

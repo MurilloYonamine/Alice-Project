@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 
 namespace LEVELGENERATOR.WINDOW {
+#if UNITY_EDITOR
     public class LevelWindow : EditorWindow {
         [field: SerializeField, ReadOnly] public const int ROW = 23;
         [field: SerializeField, ReadOnly] public const int COLUMN = 10;
@@ -246,4 +247,5 @@ namespace LEVELGENERATOR.WINDOW {
             Debug.Log("Foi criado o asset em: " + path);
         }
     }
+    #endif
 }
