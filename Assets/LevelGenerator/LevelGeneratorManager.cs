@@ -73,7 +73,7 @@ namespace LEVELGENERATOR
         {
             if (_currentLevelIndex >= _levels.Count)
             {
-                Debug.LogWarning("Sem mais nívels para gerar.");
+                //Debug.LogWarning("Sem mais nívels para gerar.");
                 return;
             }
 
@@ -83,7 +83,7 @@ namespace LEVELGENERATOR
             {
                 AdvanceToNextRow(currentLevel);
             }
-            Debug.Log($"Gerando o level {currentLevel}...");
+//            Debug.Log($"Gerando o level {currentLevel}...");
             _currentLevelIndex++;
             _currentRowIndex = 0;
         }

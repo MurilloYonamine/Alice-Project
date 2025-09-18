@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "PlayerControls",
     "maps": [
         {
@@ -22,6 +23,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Touch",
+                    "type": "Value",
+                    "id": "1fbbf263-3d5f-495a-9047-15d77fcaf7d4",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -115,23 +125,34 @@
                 },
                 {
                     "name": "",
-                    "id": "ba031d68-1555-4bc5-9d45-a902204ec199",
-                    "path": "",
+                    "id": "292c2085-620f-430c-bc51-dac5e9f854f2",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Move",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "292c2085-620f-430c-bc51-dac5e9f854f2",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
+                    "id": "f9646fea-f8d1-43be-a482-b520ac2bebba",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "MultiTap",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Touch",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "72b55e1e-9f49-49ec-9e02-fe2ef0f27c4e",
+                    "path": "<Touchscreen>/primaryTouch/position",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": ";Touch",
+                    "action": "Touch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

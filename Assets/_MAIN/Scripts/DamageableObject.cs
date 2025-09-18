@@ -63,7 +63,7 @@ public class DamageableObject : MonoBehaviour, IDamageable {
         StartCoroutine(HitTwinkle(timer));
         yield return new WaitForSeconds(timer);
 
-        _rigidBody2D.gravityScale = 1f;
+        _rigidBody2D.gravityScale = 1f * Time.deltaTime;
         Invencible = false;
         _physicsCollider.enabled = !Invencible;
     }
@@ -74,7 +74,7 @@ public class DamageableObject : MonoBehaviour, IDamageable {
         float elapsedTime = 0f;
 
         while (elapsedTime <= timer) {
-            spriteRenderer.color = Color.Lerp(originalColor, Color.white, Mathf.PingPong(Time.time * 5f, 1f));
+            spriteRenderer.color = Color.Lerp(originalColor, Color.black, Mathf.PingPong(Time.time * 5f, 1f));
             elapsedTime += Time.deltaTime;
             yield return null;
         }

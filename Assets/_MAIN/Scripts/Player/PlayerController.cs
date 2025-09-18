@@ -6,6 +6,7 @@ namespace PLAYER {
     public class PlayerController : MonoBehaviour {
         private Rigidbody2D _rigidBody2D;
         private PlayerInputHandler _playerInput;
+        private TouchScreenMovement _touchScreenMovement;
         [SerializeField] private PlayerJump _playerJump;
 
         [Header("Layers")]
@@ -36,6 +37,7 @@ namespace PLAYER {
         }
         private void OnEnable() {
             InputEvents.OnPlayerMove += HandleMoveInput;
+            InputEvents.OnPlayerMove += HandleMoveInput;
             InputEvents.OnPlayerJump += HandlePlayerJump;
             InputEvents.OnPlayerJumpReleased += HandlePlayerJumpReleased;
         }
@@ -49,7 +51,9 @@ namespace PLAYER {
             _playerJump.OnUpdate();
             _rigidBody2D.linearVelocity = new Vector2(_movement.x * _speed, _rigidBody2D.linearVelocity.y);
         }
-        private void HandleMoveInput(Vector2 inputDirection) => _movement = inputDirection;
+        private void HandleMoveInput(Vector2 inputDirection) {
+            _movement = inputDirection; 
+        }
         private void HandlePlayerJump() {
             _playerJump.HandleJumpPressed();
         }

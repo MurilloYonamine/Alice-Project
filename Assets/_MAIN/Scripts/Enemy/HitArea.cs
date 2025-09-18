@@ -9,7 +9,7 @@ namespace ENEMY {
             if (collision.gameObject.TryGetComponent<PlayerController>(out PlayerController player)) {
 
                 if (EnemyPoolManager.Instance == null) return;
-                Debug.Log("Player hit Enemy!");
+//                Debug.Log("Player hit Enemy!");
                 EnemyPoolManager.Instance.ReturnToPool(originalGameObject);
                 InputEvents.RaisePlayerAttack();
             }
