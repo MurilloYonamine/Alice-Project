@@ -7,7 +7,7 @@ namespace PLAYER {
         private Rigidbody2D _rigidBody2D;
         private PlayerInputHandler _playerInput;
         private TouchScreenMovement _touchScreenMovement;
-        [SerializeField] private PlayerJump _playerJump;
+        public PlayerJump PlayerJump { get; private set; }
 
         [Header("Layers")]
         [SerializeField] private LayerMask _enemyLayer;
@@ -28,7 +28,7 @@ namespace PLAYER {
             DamageableObject damageable = GetComponent<DamageableObject>();
 
             // Inicializa o sistema de pulo
-            _playerJump = new PlayerJump(_rigidBody2D, _groundLayer, damageable);
+            PlayerJump = new PlayerJump(_rigidBody2D, _groundLayer, damageable);
 
             if (LevelGeneratorManager.Instance == null) return;
             _levelSize = LevelGeneratorManager.Instance.LevelSize;
@@ -48,17 +48,17 @@ namespace PLAYER {
         }
         private void Update() {
             GetCurrentLocation();
-            _playerJump.OnUpdate();
+            PlayerJump.OnUpdate();
             _rigidBody2D.linearVelocity = new Vector2(_movement.x * _speed, _rigidBody2D.linearVelocity.y);
         }
         private void HandleMoveInput(Vector2 inputDirection) {
             _movement = inputDirection; 
         }
         private void HandlePlayerJump() {
-            _playerJump.HandleJumpPressed();
+            PlayerJump.HandleJumpPressed();
         }
         private void HandlePlayerJumpReleased() {
-            _playerJump.HandleJumpReleased();
+            PlayerJump.HandleJumpReleased();
         }
         private void OnDestroy() {
             _playerInput?.Dispose();
@@ -92,10 +92,10 @@ namespace PLAYER {
             }
         }
         private void OnCollisionEnter2D(Collision2D collision2D) {
-            _playerJump.CollisionEnter2D(collision2D);
+            PlayerJump.CollisionEnter2D(collision2D);
         }
         private void OnCollisionExit2D(Collision2D collision2D) {
-            _playerJump.CollisionExit2D(collision2D);
+            PlayerJump.CollisionExit2D(collision2D);
         }
     }
 }
