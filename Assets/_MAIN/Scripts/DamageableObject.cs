@@ -1,4 +1,5 @@
 using System.Collections;
+using PLAYER;
 using UnityEngine;
 
 public class DamageableObject : MonoBehaviour, IDamageable {
@@ -57,13 +58,17 @@ public class DamageableObject : MonoBehaviour, IDamageable {
     }
 
     private IEnumerator InvencibleTime() {
+        PlayerJump playerJump = gameObject.GetComponent<PlayerController>().PlayerJump;
+
+        playerJump.HandleJumpReleased();
+        
         _rigidBody2D.gravityScale = -35f;
 
         float timer = 1f;
         StartCoroutine(HitTwinkle(timer));
         yield return new WaitForSeconds(timer);
 
-        _rigidBody2D.gravityScale = 1f * Time.deltaTime;
+        _rigidBody2D.gravityScale = 1f;
         Invencible = false;
         _physicsCollider.enabled = !Invencible;
     }

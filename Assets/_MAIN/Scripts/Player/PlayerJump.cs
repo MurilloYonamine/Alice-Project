@@ -26,9 +26,9 @@ namespace PLAYER {
         [Tooltip("Maximum downward velocity allowed when falling.")]
         [SerializeField] private float _maxFallSpeed = 18f;
 
-        private bool _isGrounded;
-        private bool _jumpPressed;
-        private bool _jumpHeld;
+        public bool IsGrounded { get; private set; }
+        public bool JumpPressed { get; private set; }
+        public bool JumpHeld { get; private set; }
 
         private DamageableObject _damageable;
 
@@ -45,30 +45,30 @@ namespace PLAYER {
         }
 
         public void OnUpdate() {
-            ApplyJumpPhysics(_isGrounded);
+            ApplyJumpPhysics(IsGrounded);
         }
 
         public void HandleJumpPressed() {
             // Só registra tentativa de pulo se não estiver no knockback
             if (!_damageable.Invencible) {
-                _jumpPressed = true;
-                _jumpHeld = true;
+                JumpPressed = true;
+                JumpHeld = true;
             }
         }
 
         public void HandleJumpReleased() {
-            _jumpHeld = false;
+            JumpHeld = false;
         }
 
         public void ApplyJumpPhysics(bool isGrounded) {
             // Executa o pulo (impedido durante knockback/invencibilidade)
-            if (_jumpPressed && isGrounded && !_damageable.Invencible) {
+            if (JumpPressed && isGrounded && !_damageable.Invencible) {
                 _rigidBody2D.linearVelocity = new Vector2(_rigidBody2D.linearVelocity.x, _jumpForce);
-                _jumpPressed = false;
+                JumpPressed = false;
             }
 
             // Corta o pulo quando solta o botão
-            if (!_jumpHeld && _rigidBody2D.linearVelocity.y > 0) {
+            if (!JumpHeld && _rigidBody2D.linearVelocity.y > 0) {
                 _rigidBody2D.linearVelocity = new Vector2(_rigidBody2D.linearVelocity.x,
                     _rigidBody2D.linearVelocity.y * _jumpCutMultiplier);
             }
@@ -83,22 +83,22 @@ namespace PLAYER {
                 }
             }
             // Pulo baixo quando solta rapidamente
-            else if (_rigidBody2D.linearVelocity.y > 0 && !_jumpHeld) {
+            else if (_rigidBody2D.linearVelocity.y > 0 && !JumpHeld) {
                 _rigidBody2D.linearVelocity += (_lowJumpMultiplier - 1) * Physics2D.gravity.y * Time.deltaTime * Vector2.up;
             }
 
-            _jumpPressed = false;
+            JumpPressed = false;
         }
 
         public void CollisionEnter2D(Collision2D collision2D) {
             if (((1 << collision2D.gameObject.layer) & _groundLayer) != 0) {
-                _isGrounded = true;
+                IsGrounded = true;
                 _rigidBody2D.linearDamping = 0f;
             }
         }
 
         public void CollisionExit2D(Collision2D collision2D) {
-            _isGrounded = false;
+            IsGrounded = false;
             _rigidBody2D.linearDamping = 3f;
         }
 
