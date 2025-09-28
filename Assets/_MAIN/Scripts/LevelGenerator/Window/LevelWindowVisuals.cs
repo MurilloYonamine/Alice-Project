@@ -1,8 +1,7 @@
 using UnityEditor;
 using UnityEngine;
-using ALICE_PROJECT.LEVELGENERATOR.DATA;
 
-namespace ALICE_PROJECT.LEVELGENERATOR.WINDOW {
+namespace ALICE_PROJECT.LEVELGENERATOR.EDITOR {
     public static class LevelWindowVisuals {
         public static void DrawAnimatedTitle(string title) {
             GUIStyle titleStyle = new GUIStyle(EditorStyles.boldLabel) {
@@ -27,18 +26,6 @@ namespace ALICE_PROJECT.LEVELGENERATOR.WINDOW {
             EditorGUILayout.IntField("Número de Linhas:", row, GUILayout.Width(200));
             GUILayout.Space(20);
             EditorGUILayout.IntField("Número de Colunas:", column, GUILayout.Width(200));
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-        }
-
-    public static void DrawClickTypeSelectors(ref CellType leftClick, ref CellType rightClick) {
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.Label("Botão Esquerdo:", GUILayout.Width(100));
-            leftClick = (CellType)EditorGUILayout.EnumPopup(leftClick, GUILayout.Width(100));
-            GUILayout.Space(20);
-            GUILayout.Label("Botão Direito:", GUILayout.Width(100));
-            rightClick = (CellType)EditorGUILayout.EnumPopup(rightClick, GUILayout.Width(100));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }

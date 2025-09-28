@@ -1,118 +1,165 @@
 using System.Collections.Generic;
-using CellType = ALICE_PROJECT.LEVELGENERATOR.DATA.CellType;
-using ALICE_PROJECT.LEVELGENERATOR.DATA;
-using Unity.Collections;
+using System.Linq;
+using ALICE_PROJECT.LEVELGENERATOR.EDITOR.CORE;
+using ALICE_PROJECT.LEVELGENERATOR.EDITOR.STRATEGY;
 using UnityEditor;
 using UnityEngine;
 
-namespace ALICE_PROJECT.LEVELGENERATOR.WINDOW {
+namespace ALICE_PROJECT.LEVELGENERATOR.EDITOR {
 #if UNITY_EDITOR
     public class LevelWindow : EditorWindow {
-        [field: SerializeField, ReadOnly] public const int ROW = 23;
-        [field: SerializeField, ReadOnly] public const int COLUMN = 10;
+        [field: SerializeField] public int ROW = 23;
+        [field: SerializeField] public int COLUMN = 10;
         [field: SerializeField] public List<LevelRow> levelRows = new List<LevelRow>();
 
-        [field: SerializeField] private CellType _leftClick = CellType.Ground;
-        [field: SerializeField] private CellType _rightClick = CellType.Ground;
+        [field: SerializeField] private CellTypeSO _leftClick;
+        [field: SerializeField] private CellTypeSO _rightClick;
+        private List<CellTypeSO> _cellTypes;
 
         [MenuItem("Window/Level Generator")]
         public static void ShowWindow() {
             GetWindow<LevelWindow>("Level Generator");
         }
 
+        void OnEnable() {
+            LoadCellTypes();
+        }
+
+        void OnFocus() {
+            LoadCellTypes();
+        }
+
         void OnGUI() {
             EnsureCellTypeInitialized();
+            LevelWindowVisuals.DrawAnimatedTitle("Level Generator");
+            GUILayout.Space(10);
 
-            DrawLevelConfigurationFields();
+            LevelWindowVisuals.DrawRowColumnFields(ROW, COLUMN);
+            GUILayout.Space(10);
 
+            DrawCellTypeSelectors();
+            GUILayout.Space(10);
+
+            LevelWindowVisuals.DrawActionButtons(ResetWindow, CreateSerializedObject);
+            GUILayout.Space(10);
+
+            LevelWindowVisuals.DrawTestButton(GenerateATestLevel);
             GUILayout.Space(20);
-
-            UpdateCellTypeIfNeeded();
-
             DrawSquaresGrid();
-
         }
-        /// <summary> Garante que a lista CellType está inicializada corretamente e corresponde aos valores atuais de Row e Column. </summary>
-        private void EnsureCellTypeInitialized() {
-            // Certifica se de que CellType está inicializado corretamente
-            if (levelRows == null) levelRows = new List<LevelRow>();
 
-            // Ajusta número de linhas
+        private void LoadCellTypes() {
+            _cellTypes = Resources.LoadAll<CellTypeSO>("CellTypes").ToList();
+            if (_cellTypes.Count > 0) {
+                if (_leftClick == null) _leftClick = _cellTypes[0];
+                if (_rightClick == null) _rightClick = _cellTypes[0];
+            }
+        }
+
+        private void EnsureCellTypeInitialized() {
+            if (levelRows == null) levelRows = new List<LevelRow>();
             while (levelRows.Count < ROW) levelRows.Add(new LevelRow());
             while (levelRows.Count > ROW) levelRows.RemoveAt(levelRows.Count - 1);
-
-            // Ajusta número de colunas em cada linha
+            // Find the EmptyCellTypeSO asset from loaded cell types
+            CellTypeSO emptyType = _cellTypes?.FirstOrDefault(t => t is EmptyCellTypeSO);
             for (int x = 0; x < ROW; x++) {
                 var row = levelRows[x];
-                if (row.rowElements == null) row.rowElements = new List<CellType>();
-                while (row.rowElements.Count < COLUMN) row.rowElements.Add(CellType.Empty);
+                if (row.rowElements == null) row.rowElements = new List<CellTypeSO>();
+                while (row.rowElements.Count < COLUMN) row.rowElements.Add(emptyType);
                 while (row.rowElements.Count > COLUMN) row.rowElements.RemoveAt(row.rowElements.Count - 1);
             }
         }
 
-        /// <summary> Desenha os campos de entrada para Row e Column. </summary>
-        private void DrawLevelConfigurationFields() {
-            LevelWindowVisuals.DrawAnimatedTitle("Level Generator");
-            GUILayout.Space(10);
-            LevelWindowVisuals.DrawRowColumnFields(ROW, COLUMN);
-            GUILayout.Space(10);
-            LevelWindowVisuals.DrawClickTypeSelectors(ref _leftClick, ref _rightClick);
-            GUILayout.Space(10);
-            LevelWindowVisuals.DrawActionButtons(ResetWindow, CreateSerializedObject);
-            GUILayout.Space(10);
-            LevelWindowVisuals.DrawTestButton(GenerateATestLevel);
+        private void DrawCellTypeSelectors() {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.Label("Clique Esquerdo", GUILayout.Width(120));
+            int leftIndex = Mathf.Max(0, _cellTypes.IndexOf(_leftClick));
+            if (leftIndex >= _cellTypes.Count) leftIndex = 0;
+            leftIndex = EditorGUILayout.Popup(leftIndex, _cellTypes.Select(t => t.typeName).ToArray(), GUILayout.Width(150));
+            _leftClick = _cellTypes.Count > 0 ? _cellTypes[leftIndex] : null;
+            GUILayout.Space(40);
+            GUILayout.Label("Clique Direito", GUILayout.Width(120));
+            int rightIndex = Mathf.Max(0, _cellTypes.IndexOf(_rightClick));
+            if (rightIndex >= _cellTypes.Count) rightIndex = 0;
+            rightIndex = EditorGUILayout.Popup(rightIndex, _cellTypes.Select(t => t.typeName).ToArray(), GUILayout.Width(150));
+            _rightClick = _cellTypes.Count > 0 ? _cellTypes[rightIndex] : null;
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+        private void ResetWindow() {
+            // Find the EmptyCellTypeSO asset from loaded cell types
+            CellTypeSO emptyType = _cellTypes?.FirstOrDefault(t => t is EmptyCellTypeSO);
+            levelRows = new List<LevelRow>();
+            for (int x = 0; x < ROW; x++) {
+                levelRows.Add(new LevelRow());
+                for (int y = 0; y < COLUMN; y++)
+                    levelRows[x].rowElements.Add(emptyType);
+            }
         }
 
-        /// <summary> Atualiza os estados dos quadrados se Row ou Column forem alterados. </summary>
-        private void UpdateCellTypeIfNeeded() {
-            bool isRowCountDifferent = levelRows.Count != ROW;
-            bool isColumnCountDifferent = ROW > 0 && levelRows[0].rowElements.Count != COLUMN;
-
-            // Reinicializa a lista se o número de linhas ou colunas mudou
-            if (isRowCountDifferent || isColumnCountDifferent) {
-                levelRows = new List<LevelRow>();
-
-                for (int i = 0; i < ROW; i++) {
-                    levelRows.Add(new LevelRow());
-
-                    for (int j = 0; j < COLUMN; j++)
-                        levelRows[i].rowElements.Add(CellType.Empty);
-
+        private void GenerateATestLevel() {
+            ResetWindow();
+            System.Random rand = new System.Random();
+            int lastStructureRow = -5;
+            const int FIRST_ROW = 2;
+            for (int x = FIRST_ROW; x < ROW; x++) {
+                if (x - lastStructureRow < 3) continue;
+                int structureLength = rand.Next(1, 5);
+                int startY = rand.Next(0, COLUMN - structureLength + 1);
+                // Coloca a estrutura
+                for (int y = startY; y < startY + structureLength; y++) {
+                    levelRows[x].rowElements[y] = _cellTypes.FirstOrDefault(t => t.typeName == "Ground") ?? _cellTypes[0];
                 }
+                // Coloca apenas 1 inimigo acima da estrutura
+                if (x > 0) {
+                    int enemyY = rand.Next(startY, startY + structureLength);
+                    if (levelRows[x - 1].rowElements[enemyY] == _cellTypes[0]) {
+                        levelRows[x - 1].rowElements[enemyY] = _cellTypes.FirstOrDefault(t => t.typeName == "Enemy") ?? _cellTypes[0];
+                    }
+                }
+                lastStructureRow = x;
             }
         }
 
-        /// <summary> Obtém a cor para uma opção específica de SquareOption. </summary>
-        private Color GetColorForOption(CellType option) {
-            switch (option) {
-                case CellType.Empty: return Color.white;
-                case CellType.Ground: return Color.yellow;
-                case CellType.Enemy: return Color.red;
-                default: return Color.white;
+        private void CreateSerializedObject() {
+            LevelData levelData = ScriptableObject.CreateInstance<LevelData>();
+            levelData.Cells = new List<LevelRow>();
+            // Find the EmptyCellTypeSO asset from loaded cell types
+            CellTypeSO emptyType = _cellTypes?.FirstOrDefault(t => t is EmptyCellTypeSO);
+            foreach (LevelRow row in levelRows) {
+                LevelRow newRow = new LevelRow();
+                foreach (var cell in row.rowElements) {
+                    newRow.rowElements.Add(cell ?? emptyType);
+                }
+                levelData.Cells.Add(newRow);
             }
+            const string LEVELS_PATH = "Assets/_MAIN/Resources/Levels";
+            string path = EditorUtility.SaveFilePanelInProject("Save Level Data", "New Level Data", "asset", "Please enter a file name to save the level data to", LEVELS_PATH);
+            if (string.IsNullOrEmpty(path)) return;
+            AssetDatabase.CreateAsset(levelData, path);
+            AssetDatabase.SaveAssets();
+            ResetWindow();
+            Debug.Log("Level Data asset foi criado com sucesso!");
+            Debug.Log("Foi criado o asset em: " + path);
         }
 
-        /// <summary> Desenha a grade de quadrados baseada nos valores atuais de Row e Column. </summary>
+
         private void DrawSquaresGrid() {
             float width = 24;
             float height = 24;
-
-            // Desenha a grade de quadrados
             for (int x = 0; x < ROW; x++) {
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
                 for (int y = 0; y < COLUMN; y++) {
-
-                    Color choiceColor = GetColorForOption(levelRows[x].rowElements[y]);
+                    Color choiceColor = levelRows[x].rowElements[y] != null ? levelRows[x].rowElements[y].color : Color.white;
                     Color prevColor = GUI.backgroundColor;
                     GUI.backgroundColor = choiceColor;
-
                     Rect buttonRect = GUILayoutUtility.GetRect(width, height);
                     if (GUI.Button(buttonRect, GUIContent.none)) {
                         bool isRightButton = Event.current.button == 1;
                         UpdateSquareState(x, y, isRightButton);
                     }
-
                     GUI.backgroundColor = prevColor;
                 }
                 GUILayout.FlexibleSpace();
@@ -120,87 +167,9 @@ namespace ALICE_PROJECT.LEVELGENERATOR.WINDOW {
             }
         }
 
-        private CellType UpdateSquareState(int x, int y, bool isRightClick = false) {
-            CellType mouseClick = isRightClick ? _rightClick : _leftClick;
-
-            switch (mouseClick) {
-                case CellType.Empty: levelRows[x].rowElements[y] = CellType.Empty; break;
-                case CellType.Ground: levelRows[x].rowElements[y] = CellType.Ground; break;
-                case CellType.Enemy: levelRows[x].rowElements[y] = CellType.Enemy; break;
-                default: levelRows[x].rowElements[y] = CellType.Empty; break;
-            }
-
-            return mouseClick;
-        }
-
-        /// <summary> Reseta a janela para os valores padrão. </summary>
-        private void ResetWindow() {
-            // ROW = 23;
-            // COLUMN = 10;
-            levelRows = new List<LevelRow>(2);
-            for (int x = 0; x < ROW; x++) {
-                levelRows.Add(new LevelRow());
-
-                for (int y = 0; y < COLUMN; y++)
-                    levelRows[x].rowElements.Add(CellType.Empty);
-            }
-        }
-
-        private void GenerateATestLevel() {
-            ResetWindow();
-
-            System.Random rand = new System.Random();
-            int lastStructureRow = -5;
-            const int FIRST_ROW = 2;
-
-            for (int x = FIRST_ROW; x < ROW; x++) {
-                if (x - lastStructureRow < 3) continue;
-
-                int structureLength = rand.Next(1, 5);
-                int startY = rand.Next(0, COLUMN - structureLength + 1);
-
-                // Coloca a estrutura
-                for (int y = startY; y < startY + structureLength; y++) {
-                    levelRows[x].rowElements[y] = CellType.Ground;
-                }
-
-                // Coloca apenas 1 inimigo acima da estrutura
-                if (x > 0) {
-                    int enemyY = rand.Next(startY, startY + structureLength);
-                    if (levelRows[x - 1].rowElements[enemyY] == CellType.Empty) {
-                        levelRows[x - 1].rowElements[enemyY] = CellType.Enemy;
-                    }
-                }
-
-                lastStructureRow = x;
-            }
-        }
-
-        /// <summary> Cria e salva um ScriptableObject LevelData baseado nos estados atuais dos quadrados. </summary>
-        private void CreateSerializedObject() {
-            LevelData levelData = ScriptableObject.CreateInstance<LevelData>();
-
-            levelData.Cells = new List<LevelRow>();
-
-            // Copia os estados dos quadrados para o novo LevelData
-            foreach (var row in levelRows) {
-                var newRow = new LevelRow();
-                newRow.rowElements.AddRange(row.rowElements);
-                levelData.Cells.Add(newRow);
-            }
-
-            const string LEVELS_PATH = "Assets/_MAIN/Resources/Levels";
-            string path = EditorUtility.SaveFilePanelInProject("Save Level Data", "New Level Data", "asset", "Please enter a file name to save the level data to", LEVELS_PATH);
-
-            if (string.IsNullOrEmpty(path)) return;
-
-            AssetDatabase.CreateAsset(levelData, path);
-            AssetDatabase.SaveAssets();
-
-            ResetWindow();
-
-            Debug.Log("Level Data asset foi criado com sucesso!");
-            Debug.Log("Foi criado o asset em: " + path);
+        private void UpdateSquareState(int x, int y, bool isRightClick = false) {
+            CellTypeSO mouseClick = isRightClick ? _rightClick : _leftClick;
+            levelRows[x].rowElements[y] = mouseClick;
         }
     }
 #endif

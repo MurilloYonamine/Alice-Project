@@ -1,6 +1,0 @@
-{
-  "name": "LevelGenerator.Window",
-  "references": ["LevelGenerator"],
-  "allowUnsafeCode": false,
-  "autoReferenced": true
-}
