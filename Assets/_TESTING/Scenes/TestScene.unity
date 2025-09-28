@@ -870,7 +870,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 3
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -894,17 +894,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e6d6c0757ee2c449e7537a1b4c3109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PlayerJump>k__BackingField:
-    _jumpForce: 0
-    <IsGrounded>k__BackingField: 0
-  _enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
   _groundLayer:
     serializedVersion: 2
     m_Bits: 192
-  _movement: {x: 0, y: 0}
   _speed: 5
+  <PlayerJump>k__BackingField:
+    _jumpForce: 0
+    _coyoteTime: 0
+    _jumpBufferTime: 0
+    _fallMultiplier: 0
+    _lowJumpMultiplier: 0
+    <IsGrounded>k__BackingField: 0
 --- !u!70 &1194487356
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -915,7 +915,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: e47b45a842a698a4c8c818732b68f03b, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -939,8 +939,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.010033265, y: -0.05438471}
-  m_Size: {x: 0.4196671, y: 1.8585691}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 2}
   m_Direction: 0
 --- !u!114 &1194487357
 MonoBehaviour:
@@ -1786,9 +1786,9 @@ PlatformEffector2D:
   m_UseOneWay: 1
   m_UseOneWayGrouping: 0
   m_SurfaceArc: 120
-  m_UseSideFriction: 1
+  m_UseSideFriction: 0
   m_UseSideBounce: 0
-  m_SideArc: 1
+  m_SideArc: 0
 --- !u!1 &1728272949
 GameObject:
   m_ObjectHideFlags: 0

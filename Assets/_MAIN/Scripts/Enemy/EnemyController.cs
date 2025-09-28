@@ -35,9 +35,6 @@ namespace ALICE_PROJECT.ENEMY {
                     if (EnemyPoolManager.Instance == null) return;
                     EnemyPoolManager.Instance.ReturnToPool(gameObject);
                     InputEvents.RaisePlayerAttack();
-                    
-                    Rigidbody2D playerRb = player.GetComponent<Rigidbody2D>();
-                    playerRb.AddForce(Vector2.up * 7f, ForceMode2D.Impulse);
                 }
             }
         }
