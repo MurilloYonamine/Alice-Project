@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 namespace ALICE_PROJECT.LEVELGENERATOR.EDITOR {
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     [CustomEditor(typeof(LevelData))]
     public class LevelDataEditor : Editor {
 
@@ -13,7 +13,7 @@ namespace ALICE_PROJECT.LEVELGENERATOR.EDITOR {
             LevelData levelData = (LevelData)target;
 
             // Verifica se há dados em LevelData
-            if (levelData.Squares == null || levelData.Squares.Count == 0) {
+            if (levelData.Cells == null || levelData.Cells.Count == 0) {
                 EditorGUILayout.HelpBox("Nenhum dado de level encontrado. Crie o asset pelo window e salve para visualizar aqui.", MessageType.Info);
                 return;
             }
@@ -24,12 +24,12 @@ namespace ALICE_PROJECT.LEVELGENERATOR.EDITOR {
             GUILayout.Space(10);
             GUILayout.Label("Level Preview", EditorStyles.boldLabel);
 
-            // Desenha a grade de quadrados
-            for (int x = 0; x < levelData.Squares.Count; x++) {
+            // Desenha a grade de células
+            for (int x = 0; x < levelData.Cells.Count; x++) {
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                for (int y = 0; y < levelData.Squares[x].rowElements.Count; y++) {
-                    Color choiceColor = GetColorForOption(levelData.Squares[x].rowElements[y]);
+                for (int y = 0; y < levelData.Cells[x].rowElements.Count; y++) {
+                    Color choiceColor = GetColorForOption(levelData.Cells[x].rowElements[y]);
                     Rect rect = GUILayoutUtility.GetRect(width, height, GUILayout.Width(width), GUILayout.Height(height));
                     EditorGUI.DrawRect(rect, choiceColor);
                 }
@@ -37,14 +37,14 @@ namespace ALICE_PROJECT.LEVELGENERATOR.EDITOR {
                 GUILayout.EndHorizontal();
             }
         }
-        private Color GetColorForOption(SquareStates option) {
+        private Color GetColorForOption(CellType option) {
             switch (option) {
-                case SquareStates.Empty: return Color.gray;
-                case SquareStates.Ground: return Color.yellow;
-                case SquareStates.Enemy: return Color.red;
+                case CellType.Empty: return Color.gray;
+                case CellType.Ground: return Color.yellow;
+                case CellType.Enemy: return Color.red;
                 default: return Color.white;
             }
         }
     }
-        #endif
+#endif
 }

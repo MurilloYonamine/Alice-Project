@@ -38,7 +38,7 @@ namespace ALICE_PROJECT.LEVELGENERATOR {
             const string LEVEL_PATH = "Levels/";
 
             _levels = new List<LevelData>(Resources.LoadAll<LevelData>(LEVEL_PATH));
-            LevelSize = _levels[0].Squares.Count - 1;
+            LevelSize = _levels[0].Cells.Count - 1;
 
             GetAllEnemies();
 
@@ -50,9 +50,9 @@ namespace ALICE_PROJECT.LEVELGENERATOR {
         private void GetAllEnemies() {
             int enemyCount = 0;
             foreach (LevelData level in _levels) {
-                foreach (SquareRow row in level.Squares) {
-                    foreach (SquareStates state in row.rowElements) {
-                        if (state == SquareStates.Enemy) {
+                foreach (LevelRow row in level.Cells) {
+                    foreach (CellType state in row.rowElements) {
+                        if (state == CellType.Enemy) {
                             enemyCount++;
                         }
                     }
@@ -78,18 +78,18 @@ namespace ALICE_PROJECT.LEVELGENERATOR {
         }
         private void AdvanceToNextRow(LevelData level) {
             LevelData currentLevel = level;
-            SquareRow currentRow = currentLevel.Squares[_currentRowIndex];
+            LevelRow currentRow = currentLevel.Cells[_currentRowIndex];
             int rowSize = currentRow.rowElements.Count;
 
             for (int x = 0; x < rowSize; x++) {
-                SquareStates currentSquareState = currentRow.rowElements[x];
+                CellType currentSquareState = currentRow.rowElements[x];
                 Vector3Int coordinate = new Vector3Int(x, _globalRowIndex, 0);
                 Vector3Int convertedCoordinate = CoordinateConverter.GetTileCoordinate(coordinate, _bounds);
 
                 switch (currentSquareState) {
-                    case SquareStates.Empty: EmptyTilemap.SetTile(convertedCoordinate, _emptyTile); break;
-                    case SquareStates.Ground: GroundTilemap.SetTile(convertedCoordinate, _groundTile); break;
-                    case SquareStates.Enemy:
+                    case CellType.Empty: EmptyTilemap.SetTile(convertedCoordinate, _emptyTile); break;
+                    case CellType.Ground: GroundTilemap.SetTile(convertedCoordinate, _groundTile); break;
+                    case CellType.Enemy:
                         EmptyTilemap.SetTile(convertedCoordinate, _emptyTile);
                         EnemyPoolManager enemyPool = EnemyPoolManager.Instance;
                         GameObject enemy = enemyPool.GetPooledObject();

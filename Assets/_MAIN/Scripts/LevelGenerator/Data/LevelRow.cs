@@ -1,13 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
 namespace ALICE_PROJECT.LEVELGENERATOR.DATA {
-    [System.Serializable]
-    public class SquareRow {
+    [Serializable]
+    public class LevelRow {
         [field: SerializeField, ReadOnly(true)] private readonly string name = "Row";
-        public List<SquareStates> rowElements = new List<SquareStates>();
+        public List<CellType> rowElements = new List<CellType>();
 
-        private string GetName() => $"Name: {name}\nRow ({rowElements.Count})"; 
+        private string GetName() => $"Name: {name}\nRow ({rowElements.Count})";
     }
 }
