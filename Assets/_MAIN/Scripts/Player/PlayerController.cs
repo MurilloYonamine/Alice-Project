@@ -4,11 +4,16 @@ using ALICE_PROJECT.SCREEN;
 using UnityEngine;
 
 namespace ALICE_PROJECT.PLAYER {
+    [RequireComponent(typeof(DamageableObject))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerController : MonoBehaviour {
-        private Rigidbody2D _rigidBody2D;
-        private PlayerInputHandler _playerInput;
-        private TouchScreenMovement _touchScreenMovement;
-        public PlayerJump PlayerJump { get; private set; }
+        [Header("Components")]
+    private DamageableObject _damageableObject;
+    private Rigidbody2D _rigidBody2D;
+    private PlayerInputHandler _playerInput;
+    private TouchScreenMovement _touchScreenMovement;
+    [field: SerializeField] public PlayerJump PlayerJump { get; private set; }
+    [field: SerializeField] public PlayerSmash PlayerSmash { get; private set; }
 
         [Header("Layers")]
         [SerializeField] private LayerMask _enemyLayer;
@@ -23,14 +28,14 @@ namespace ALICE_PROJECT.PLAYER {
         private int _lastMid;
         private int _levelSize;
 
-        private void Start() {
+        private void Awake() {
             _playerInput = new PlayerInputHandler();
             _rigidBody2D = GetComponent<Rigidbody2D>();
-            DamageableObject damageable = GetComponent<DamageableObject>();
-
-            // Inicializa o sistema de pulo
-            PlayerJump = new PlayerJump(_rigidBody2D, _groundLayer, damageable);
-
+            _damageableObject = GetComponent<DamageableObject>();
+            PlayerJump = new PlayerJump(_rigidBody2D, _groundLayer);
+            PlayerSmash = new PlayerSmash(_rigidBody2D, _damageableObject, PlayerJump);
+        }
+        private void Start() {
             if (LevelGeneratorManager.Instance == null) return;
             _levelSize = LevelGeneratorManager.Instance.LevelSize;
 
@@ -38,28 +43,26 @@ namespace ALICE_PROJECT.PLAYER {
         }
         private void OnEnable() {
             InputEvents.OnPlayerMove += HandleMoveInput;
-            InputEvents.OnPlayerMove += HandleMoveInput;
             InputEvents.OnPlayerJump += HandlePlayerJump;
-            InputEvents.OnPlayerJumpReleased += HandlePlayerJumpReleased;
+            InputEvents.OnPlayerSmashDown += HandlePlayerSmashDown;
         }
         private void OnDisable() {
             InputEvents.OnPlayerMove -= HandleMoveInput;
             InputEvents.OnPlayerJump -= HandlePlayerJump;
-            InputEvents.OnPlayerJumpReleased -= HandlePlayerJumpReleased;
+            InputEvents.OnPlayerSmashDown -= HandlePlayerSmashDown;
         }
         private void Update() {
             GetCurrentLocation();
-            PlayerJump.OnUpdate();
             _rigidBody2D.linearVelocity = new Vector2(_movement.x * _speed, _rigidBody2D.linearVelocity.y);
         }
         private void HandleMoveInput(Vector2 inputDirection) {
-            _movement = inputDirection; 
+            _movement = inputDirection;
         }
         private void HandlePlayerJump() {
-            PlayerJump.HandleJumpPressed();
+            PlayerJump.Jump();
         }
-        private void HandlePlayerJumpReleased() {
-            PlayerJump.HandleJumpReleased();
+        private void HandlePlayerSmashDown() {
+            PlayerSmash.SmashDown();
         }
         private void OnDestroy() {
             _playerInput?.Dispose();
@@ -94,6 +97,7 @@ namespace ALICE_PROJECT.PLAYER {
         }
         private void OnCollisionEnter2D(Collision2D collision2D) {
             PlayerJump.CollisionEnter2D(collision2D);
+            PlayerSmash.OnCollisionEnter2D();
         }
         private void OnCollisionExit2D(Collision2D collision2D) {
             PlayerJump.CollisionExit2D(collision2D);

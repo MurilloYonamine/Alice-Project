@@ -119,56 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &70664690
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 70664691}
-  - component: {fileID: 70664692}
-  m_Layer: 0
-  m_Name: Generate Level Test
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &70664691
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 70664690}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2080642505}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &70664692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 70664690}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a021bf2f88ce91740b22625aa1c9798f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _levelData: {fileID: 0}
-  _tilemap: {fileID: 1595247414}
-  _tileTest: {fileID: 11400000, guid: df13796d54f33344a9e7e901fb7e5d3c, type: 2}
-  <StructureTile>k__BackingField: {fileID: 0}
-  <EnemyTile>k__BackingField: {fileID: 0}
-  <EmptyTile>k__BackingField: {fileID: 0}
 --- !u!1 &493774249
 GameObject:
   m_ObjectHideFlags: 0
@@ -825,9 +775,9 @@ GameObject:
   - component: {fileID: 1194487349}
   - component: {fileID: 1194487348}
   - component: {fileID: 1194487355}
+  - component: {fileID: 1194487357}
   - component: {fileID: 1194487352}
   - component: {fileID: 1194487356}
-  - component: {fileID: 1194487357}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -930,7 +880,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &1194487355
 MonoBehaviour:
@@ -944,12 +894,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e6d6c0757ee2c449e7537a1b4c3109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <PlayerJump>k__BackingField:
+    _jumpForce: 0
+    <IsGrounded>k__BackingField: 0
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 128
   _groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
   _movement: {x: 0, y: 0}
   _speed: 5
 --- !u!70 &1194487356
@@ -1002,7 +955,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 20
-  _invencibleTimeElapsed: 0
   _targetable: 0
   _invencible: 0
   _disableSimulation: 0
@@ -1833,8 +1785,8 @@ PlatformEffector2D:
   m_RotationalOffset: 0
   m_UseOneWay: 1
   m_UseOneWayGrouping: 0
-  m_SurfaceArc: 180
-  m_UseSideFriction: 0
+  m_SurfaceArc: 120
+  m_UseSideFriction: 1
   m_UseSideBounce: 0
   m_SideArc: 1
 --- !u!1 &1728272949
@@ -2064,8 +2016,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 70664691}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807

@@ -4,11 +4,11 @@ using ALICE_PROJECT.PLAYER;
 using UnityEngine;
 
 namespace ALICE_PROJECT {
+    [RequireComponent(typeof(Rigidbody2D))]
     public class DamageableObject : MonoBehaviour, IDamageable {
         private Rigidbody2D _rigidBody2D;
 
         [SerializeField] private float _health;
-        [SerializeField] private float _invencibleTimeElapsed;
         [SerializeField] private bool _targetable;
         [SerializeField] private bool _invencible;
         [SerializeField] private bool _disableSimulation;
@@ -34,14 +34,10 @@ namespace ALICE_PROJECT {
         public bool Invencible {
             get => _invencible; set {
                 _invencible = value;
-
-                if (_invencible == true) {
-                    _invencibleTimeElapsed = 0f;
-                }
             }
         }
 
-        private void Start() {
+        private void Awake() {
             _rigidBody2D = GetComponent<Rigidbody2D>();
         }
 
@@ -51,40 +47,9 @@ namespace ALICE_PROJECT {
 
                 //_rigidBody2D.AddForce(knockback, ForceMode2D.Impulse);
 
-                Invencible = true;
-                _physicsCollider.enabled = !Invencible;
-                StartCoroutine(InvencibleTime());
+                // Invencible = true;
+                // _physicsCollider.enabled = !Invencible;
             }
-        }
-
-        private IEnumerator InvencibleTime() {
-            PlayerJump playerJump = gameObject.GetComponent<PlayerController>().PlayerJump;
-
-            playerJump.HandleJumpReleased();
-
-            _rigidBody2D.gravityScale = -35f;
-
-            float timer = 1f;
-            StartCoroutine(HitTwinkle(timer));
-            yield return new WaitForSeconds(timer);
-
-            _rigidBody2D.gravityScale = 1f;
-            Invencible = false;
-            _physicsCollider.enabled = !Invencible;
-        }
-
-        private IEnumerator HitTwinkle(float timer) {
-            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-            Color originalColor = spriteRenderer.color;
-            float elapsedTime = 0f;
-
-            while (elapsedTime <= timer) {
-                spriteRenderer.color = Color.Lerp(originalColor, Color.black, Mathf.PingPong(Time.time * 5f, 1f));
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-
-            spriteRenderer.color = originalColor;
         }
 
         public void OnHit(float damage) {
@@ -97,13 +62,6 @@ namespace ALICE_PROJECT {
 
         public void OnObjectDestroyed() {
             throw new System.NotImplementedException();
-        }
-
-        private void OnCollisionEnter2D(Collision2D collision2D) {
-            // Comentado: não cancela mais a invencibilidade ao tocar o chão
-            // if (((1 << collision2D.gameObject.layer) & _groundLayer) != 0) {
-            //     Invencible = false;
-            // }
         }
     }
 }

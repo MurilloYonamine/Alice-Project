@@ -4,8 +4,12 @@ using UnityEngine.InputSystem;
 namespace ALICE_PROJECT.PLAYER.INPUT {
     public class PlayerInputHandler {
         private PlayerControls _input;
+
+        [Header("Actions")]
         private InputAction _move;
         private InputAction _jump;
+        private InputAction _smashDown;
+
         public PlayerInputHandler() {
             _input = new PlayerControls();
 
@@ -17,6 +21,9 @@ namespace ALICE_PROJECT.PLAYER.INPUT {
             _jump.performed += HandlePlayerJump;
             _jump.canceled += HandlePlayerJumpReleased;
 
+            _smashDown = _input.Player.SmashDown;
+            _smashDown.performed += HandlePlayerSmashDown;
+
             _input.Enable();
         }
         public void Dispose() {
@@ -25,6 +32,8 @@ namespace ALICE_PROJECT.PLAYER.INPUT {
 
             _jump.performed -= HandlePlayerJump;
             _jump.canceled -= HandlePlayerJumpReleased;
+
+            _smashDown.performed -= HandlePlayerSmashDown;
 
             _input.Disable();
         }
@@ -35,6 +44,9 @@ namespace ALICE_PROJECT.PLAYER.INPUT {
         }
         private void HandlePlayerJump(InputAction.CallbackContext context) {
             InputEvents.RaisePlayerJump();
+        }
+        private void HandlePlayerSmashDown(InputAction.CallbackContext context) {
+            InputEvents.RaisePlayerSmashDown();
         }
         private void HandlePlayerJumpReleased(InputAction.CallbackContext context) {
             InputEvents.RaisePlayerJumpReleased();

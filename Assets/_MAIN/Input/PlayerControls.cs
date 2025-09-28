@@ -120,6 +120,15 @@ namespace ALICE_PROJECT.PLAYER.INPUT
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Smash Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""43d173db-99d1-4d81-87f9-a82b41764aa2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -241,6 +250,17 @@ namespace ALICE_PROJECT.PLAYER.INPUT
                     ""processors"": """",
                     ""groups"": "";Touch"",
                     ""action"": ""Touch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4997b200-77c1-4480-acf6-c12de49ed190"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": ""MultiTap"",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Smash Down"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -831,6 +851,7 @@ namespace ALICE_PROJECT.PLAYER.INPUT
             m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Touch = m_Player.FindAction("Touch", throwIfNotFound: true);
+            m_Player_SmashDown = m_Player.FindAction("Smash Down", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -927,6 +948,7 @@ namespace ALICE_PROJECT.PLAYER.INPUT
         private readonly InputAction m_Player_Move;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Touch;
+        private readonly InputAction m_Player_SmashDown;
         /// <summary>
         /// Provides access to input actions defined in input action map "Player".
         /// </summary>
@@ -950,6 +972,10 @@ namespace ALICE_PROJECT.PLAYER.INPUT
             /// Provides access to the underlying input action "Player/Touch".
             /// </summary>
             public InputAction @Touch => m_Wrapper.m_Player_Touch;
+            /// <summary>
+            /// Provides access to the underlying input action "Player/SmashDown".
+            /// </summary>
+            public InputAction @SmashDown => m_Wrapper.m_Player_SmashDown;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -985,6 +1011,9 @@ namespace ALICE_PROJECT.PLAYER.INPUT
                 @Touch.started += instance.OnTouch;
                 @Touch.performed += instance.OnTouch;
                 @Touch.canceled += instance.OnTouch;
+                @SmashDown.started += instance.OnSmashDown;
+                @SmashDown.performed += instance.OnSmashDown;
+                @SmashDown.canceled += instance.OnSmashDown;
             }
 
             /// <summary>
@@ -1005,6 +1034,9 @@ namespace ALICE_PROJECT.PLAYER.INPUT
                 @Touch.started -= instance.OnTouch;
                 @Touch.performed -= instance.OnTouch;
                 @Touch.canceled -= instance.OnTouch;
+                @SmashDown.started -= instance.OnSmashDown;
+                @SmashDown.performed -= instance.OnSmashDown;
+                @SmashDown.canceled -= instance.OnSmashDown;
             }
 
             /// <summary>
@@ -1326,6 +1358,13 @@ namespace ALICE_PROJECT.PLAYER.INPUT
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnTouch(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Smash Down" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSmashDown(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

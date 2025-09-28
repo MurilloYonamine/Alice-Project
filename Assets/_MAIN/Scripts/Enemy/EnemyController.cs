@@ -1,3 +1,5 @@
+using ALICE_PROJECT.PLAYER;
+using ALICE_PROJECT.PLAYER.INPUT;
 using UnityEngine;
 
 namespace ALICE_PROJECT.ENEMY {
@@ -25,6 +27,19 @@ namespace ALICE_PROJECT.ENEMY {
             _currentState?.OnExit();
             _currentState = newState;
             _currentState?.OnEnter(this);
+        }
+        private void OnCollisionEnter2D(Collision2D collision) {
+            if (collision.gameObject.TryGetComponent<PlayerController>(out PlayerController player)) {
+                DamageableObject damageableObject = player.GetComponent<DamageableObject>();
+                if (damageableObject.Invencible) {
+                    if (EnemyPoolManager.Instance == null) return;
+                    EnemyPoolManager.Instance.ReturnToPool(gameObject);
+                    InputEvents.RaisePlayerAttack();
+                    
+                    Rigidbody2D playerRb = player.GetComponent<Rigidbody2D>();
+                    playerRb.AddForce(Vector2.up * 7f, ForceMode2D.Impulse);
+                }
+            }
         }
     }
 }
