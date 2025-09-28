@@ -1,7 +1,8 @@
+using PLAYER.INPUT;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PLAYER.INPUT {
+namespace ALICE_PROJECT.PLAYER.INPUT {
     public class PlayerInputHandler {
         private PlayerControls _input;
         private InputAction _move;

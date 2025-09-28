@@ -1,4 +1,4 @@
-namespace ENEMY {
+namespace ALICE_PROJECT.ENEMY {
     public abstract class EnemyState {
         public EnemyController _enemy;
         public virtual void OnEnter(EnemyController enemy) => _enemy = enemy;

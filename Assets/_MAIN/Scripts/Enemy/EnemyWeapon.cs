@@ -1,7 +1,7 @@
-using PLAYER;
+using ALICE_PROJECT.INTERFACES;
 using UnityEngine;
 
-namespace ENEMY {
+namespace ALICE_PROJECT.ENEMY {
     public class EnemyWeapon : MonoBehaviour {
         [SerializeField] private float _knockbackForce = 100f;
         [SerializeField] private float _damage = 1f;

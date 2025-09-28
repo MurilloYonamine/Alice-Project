@@ -1,4 +1,5 @@
-using LEVELGENERATOR.DATA;
+using ALICE_PROJECT.LEVELGENERATOR.DATA;
+using ALICE_PROJECT.LEVELGENERATOR.UTILITIES;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 

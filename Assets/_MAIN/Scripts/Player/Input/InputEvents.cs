@@ -3,7 +3,7 @@ using PLAYER.INPUT;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace PLAYER.INPUT {
+namespace ALICE_PROJECT.PLAYER.INPUT {
     public static class InputEvents {
         public static event Action<Vector2> OnPlayerMove;
         public static event Action OnPlayerAttack;

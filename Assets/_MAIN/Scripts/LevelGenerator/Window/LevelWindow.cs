@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using EditorAttributes;
-using LEVELGENERATOR.DATA;
+using ALICE_PROJECT.LEVELGENERATOR.DATA;
+using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 
-namespace LEVELGENERATOR.WINDOW {
+namespace ALICE_PROJECT.LEVELGENERATOR.WINDOW {
 #if UNITY_EDITOR
     public class LevelWindow : EditorWindow {
         [field: SerializeField, ReadOnly] public const int ROW = 23;

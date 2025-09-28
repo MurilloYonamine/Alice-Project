@@ -1,8 +1,9 @@
-using LEVELGENERATOR;
-using PLAYER.INPUT;
+using ALICE_PROJECT.LEVELGENERATOR;
+using ALICE_PROJECT.PLAYER.INPUT;
+using ALICE_PROJECT.SCREEN;
 using UnityEngine;
 
-namespace PLAYER {
+namespace ALICE_PROJECT.PLAYER {
     public class PlayerController : MonoBehaviour {
         private Rigidbody2D _rigidBody2D;
         private PlayerInputHandler _playerInput;

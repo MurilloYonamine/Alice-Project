@@ -1,108 +1,110 @@
 using System.Collections;
+using ALICE_PROJECT.INTERFACES;
+using ALICE_PROJECT.PLAYER;
 using PLAYER;
 using UnityEngine;
 
-public class DamageableObject : MonoBehaviour, IDamageable {
-    private Rigidbody2D _rigidBody2D;
-    private bool canTurnInvencible = false;
+namespace ALICE_PROJECT {
+    public class DamageableObject : MonoBehaviour, IDamageable {
+        private Rigidbody2D _rigidBody2D;
 
-    [SerializeField] private float _health;
-    [SerializeField] private float _invencibleTimeElapsed;
-    [SerializeField] private bool _targetable;
-    [SerializeField] private bool _invencible;
-    [SerializeField] private bool _disableSimulation;
-    [SerializeField] public Collider2D _physicsCollider;
-    [SerializeField] private LayerMask _groundLayer;
+        [SerializeField] private float _health;
+        [SerializeField] private float _invencibleTimeElapsed;
+        [SerializeField] private bool _targetable;
+        [SerializeField] private bool _invencible;
+        [SerializeField] private bool _disableSimulation;
+        [SerializeField] public Collider2D _physicsCollider;
 
-    public float Health {
-        get => _health;
-        set {
-            _health = value;
-            if (_health <= 0) {
-                Targetable = false;
+        public float Health {
+            get => _health;
+            set {
+                _health = value;
+                if (_health <= 0) {
+                    Targetable = false;
+                }
             }
         }
-    }
-    public bool Targetable {
-        get => _targetable; set {
-            if (_disableSimulation) {
-                _rigidBody2D.simulated = false;
-            }
-            _physicsCollider.enabled = value;
-        }
-    }
-    public bool Invencible {
-        get => _invencible; set {
-            _invencible = value;
-
-            if (_invencible == true) {
-                _invencibleTimeElapsed = 0f;
+        public bool Targetable {
+            get => _targetable; set {
+                if (_disableSimulation) {
+                    _rigidBody2D.simulated = false;
+                }
+                _physicsCollider.enabled = value;
             }
         }
-    }
+        public bool Invencible {
+            get => _invencible; set {
+                _invencible = value;
 
-    private void Start() {
-        _rigidBody2D = GetComponent<Rigidbody2D>();
-    }
+                if (_invencible == true) {
+                    _invencibleTimeElapsed = 0f;
+                }
+            }
+        }
 
-    public void OnHit(float damage, Vector2 knockback) {
-        if (!Invencible) {
-            Health -= damage;
+        private void Start() {
+            _rigidBody2D = GetComponent<Rigidbody2D>();
+        }
 
-            //_rigidBody2D.AddForce(knockback, ForceMode2D.Impulse);
+        public void OnHit(float damage, Vector2 knockback) {
+            if (!Invencible) {
+                Health -= damage;
 
-            Invencible = true;
+                //_rigidBody2D.AddForce(knockback, ForceMode2D.Impulse);
+
+                Invencible = true;
+                _physicsCollider.enabled = !Invencible;
+                StartCoroutine(InvencibleTime());
+            }
+        }
+
+        private IEnumerator InvencibleTime() {
+            PlayerJump playerJump = gameObject.GetComponent<PlayerController>().PlayerJump;
+
+            playerJump.HandleJumpReleased();
+
+            _rigidBody2D.gravityScale = -35f;
+
+            float timer = 1f;
+            StartCoroutine(HitTwinkle(timer));
+            yield return new WaitForSeconds(timer);
+
+            _rigidBody2D.gravityScale = 1f;
+            Invencible = false;
             _physicsCollider.enabled = !Invencible;
-            StartCoroutine(InvencibleTime());
-        }
-    }
-
-    private IEnumerator InvencibleTime() {
-        PlayerJump playerJump = gameObject.GetComponent<PlayerController>().PlayerJump;
-
-        playerJump.HandleJumpReleased();
-        
-        _rigidBody2D.gravityScale = -35f;
-
-        float timer = 1f;
-        StartCoroutine(HitTwinkle(timer));
-        yield return new WaitForSeconds(timer);
-
-        _rigidBody2D.gravityScale = 1f;
-        Invencible = false;
-        _physicsCollider.enabled = !Invencible;
-    }
-
-    private IEnumerator HitTwinkle(float timer) {
-        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        Color originalColor = spriteRenderer.color;
-        float elapsedTime = 0f;
-
-        while (elapsedTime <= timer) {
-            spriteRenderer.color = Color.Lerp(originalColor, Color.black, Mathf.PingPong(Time.time * 5f, 1f));
-            elapsedTime += Time.deltaTime;
-            yield return null;
         }
 
-        spriteRenderer.color = originalColor;
-    }
+        private IEnumerator HitTwinkle(float timer) {
+            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            Color originalColor = spriteRenderer.color;
+            float elapsedTime = 0f;
 
-    public void OnHit(float damage) {
-        if (!Invencible) {
-            Health -= damage;
+            while (elapsedTime <= timer) {
+                spriteRenderer.color = Color.Lerp(originalColor, Color.black, Mathf.PingPong(Time.time * 5f, 1f));
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
 
-            Invencible = true;
+            spriteRenderer.color = originalColor;
         }
-    }
 
-    public void OnObjectDestroyed() {
-        throw new System.NotImplementedException();
-    }
+        public void OnHit(float damage) {
+            if (!Invencible) {
+                Health -= damage;
 
-    private void OnCollisionEnter2D(Collision2D collision2D) {
-        // Comentado: não cancela mais a invencibilidade ao tocar o chão
-        // if (((1 << collision2D.gameObject.layer) & _groundLayer) != 0) {
-        //     Invencible = false;
-        // }
+                Invencible = true;
+            }
+        }
+
+        public void OnObjectDestroyed() {
+            throw new System.NotImplementedException();
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision2D) {
+            // Comentado: não cancela mais a invencibilidade ao tocar o chão
+            // if (((1 << collision2D.gameObject.layer) & _groundLayer) != 0) {
+            //     Invencible = false;
+            // }
+        }
     }
 }

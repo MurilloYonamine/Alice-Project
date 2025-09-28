@@ -1,9 +1,9 @@
-using LEVELGENERATOR.DATA;
+using ALICE_PROJECT.LEVELGENERATOR.DATA;
 using UnityEditor;
 using UnityEngine;
 
-namespace LEVELGENERATOR.EDITOR {
-        #if UNITY_EDITOR
+namespace ALICE_PROJECT.LEVELGENERATOR.EDITOR {
+    #if UNITY_EDITOR
     [CustomEditor(typeof(LevelData))]
     public class LevelDataEditor : Editor {
 

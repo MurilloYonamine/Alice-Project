@@ -1,6 +1,6 @@
 using System;
 
-namespace LEVELGENERATOR {
+namespace ALICE_PROJECT.LEVELGENERATOR {
     public static class LevelEvents {
         public static event Action OnPlayerAdvanceChunk;
 

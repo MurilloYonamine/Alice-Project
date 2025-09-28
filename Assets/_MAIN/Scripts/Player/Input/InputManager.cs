@@ -1,6 +1,7 @@
+using PLAYER.INPUT;
 using UnityEngine;
 
-namespace PLAYER.INPUT {
+namespace ALICE_PROJECT.PLAYER.INPUT {
     public class InputManager : MonoBehaviour {
         public static PlayerControls Controls;
 

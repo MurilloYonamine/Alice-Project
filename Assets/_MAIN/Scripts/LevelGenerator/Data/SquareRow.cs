@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
-namespace LEVELGENERATOR.DATA {
+namespace ALICE_PROJECT.LEVELGENERATOR.DATA {
     [System.Serializable]
     public class SquareRow {
         [field: SerializeField, ReadOnly(true)] private readonly string name = "Row";

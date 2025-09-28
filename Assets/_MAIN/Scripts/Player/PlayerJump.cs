@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace PLAYER {
+namespace ALICE_PROJECT.PLAYER {
     /// <summary>
     /// Handles player jump mechanics including jump force, cut, fall speed, and ground detection.
     /// </summary>

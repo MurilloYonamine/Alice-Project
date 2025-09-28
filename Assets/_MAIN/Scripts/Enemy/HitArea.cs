@@ -1,8 +1,8 @@
-using PLAYER;
-using PLAYER.INPUT;
+using ALICE_PROJECT.PLAYER;
+using ALICE_PROJECT.PLAYER.INPUT;
 using UnityEngine;
 
-namespace ENEMY {
+namespace ALICE_PROJECT.ENEMY {
     public class HitArea : MonoBehaviour {
         [SerializeField] private GameObject originalGameObject;
         private void OnCollisionEnter2D(Collision2D collision) {

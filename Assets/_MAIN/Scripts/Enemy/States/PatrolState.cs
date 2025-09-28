@@ -1,5 +1,5 @@
 using UnityEngine;
-namespace ENEMY {
+namespace ALICE_PROJECT.ENEMY {
     public class PatrolState : EnemyState {
         private float _enemySpeed = 1f;
 

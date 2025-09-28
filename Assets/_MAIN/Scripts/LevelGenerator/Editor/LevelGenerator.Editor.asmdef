@@ -1,0 +1,7 @@
+{
+  "name": "LevelGenerator.Editor",
+  "references": ["LevelGenerator"],
+  "includePlatforms": ["Editor"],
+  "allowUnsafeCode": false,
+  "autoReferenced": true
+}

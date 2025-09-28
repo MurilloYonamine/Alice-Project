@@ -1,8 +1,6 @@
-using PLAYER;
-using PLAYER.INPUT;
 using UnityEngine;
 
-namespace ENEMY {
+namespace ALICE_PROJECT.ENEMY {
     public class EnemyController : MonoBehaviour {
         [Header("State Machine")]
         private EnemyState _currentState;
