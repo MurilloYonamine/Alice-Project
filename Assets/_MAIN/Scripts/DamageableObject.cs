@@ -1,7 +1,6 @@
 using System.Collections;
 using ALICE_PROJECT.INTERFACES;
 using ALICE_PROJECT.PLAYER;
-using PLAYER;
 using UnityEngine;
 
 namespace ALICE_PROJECT {

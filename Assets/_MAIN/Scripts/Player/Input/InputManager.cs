@@ -1,4 +1,3 @@
-using PLAYER.INPUT;
 using UnityEngine;
 
 namespace ALICE_PROJECT.PLAYER.INPUT {

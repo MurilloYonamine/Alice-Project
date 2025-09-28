@@ -944,13 +944,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e6d6c0757ee2c449e7537a1b4c3109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerJump:
-    _jumpForce: 0
-    _jumpCutMultiplier: 0
-    _fallMultiplier: 0
-    _lowJumpMultiplier: 0
-    _maxFallSpeed: 0
-    _isGrounded: 0
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -1014,9 +1007,6 @@ MonoBehaviour:
   _invencible: 0
   _disableSimulation: 0
   _physicsCollider: {fileID: 1194487356}
-  _groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!1 &1203794572
 GameObject:
   m_ObjectHideFlags: 0
@@ -2087,5 +2077,5 @@ SceneRoots:
   - {fileID: 1154967857}
   - {fileID: 1577766993}
   - {fileID: 2080642505}
-  - {fileID: 1728272952}
   - {fileID: 1849602261}
+  - {fileID: 1728272952}
